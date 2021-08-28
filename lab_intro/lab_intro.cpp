@@ -78,7 +78,17 @@ PNG createSpotlight(PNG image, int centerX, int centerY) {
  * @return The illinify'd image.
 **/
 PNG illinify(PNG image) {
-
+  for (unsigned x = 0; x < image.width(); x++) {
+    for (unsigned y = 0; y < image.height(); y++) {
+      HSLAPixel & pixel = image.getPixel(x, y);
+      if (pixel.h - 11 < 216 - pixel.h || pixel.h - 216 > 360 - pixel.h) {
+        pixel.h = 11;
+      } else {
+        pixel.h = 216;
+      }
+    }
+  }
+  
   return image;
 }
  
@@ -96,6 +106,15 @@ PNG illinify(PNG image) {
 * @return The watermarked image.
 */
 PNG watermark(PNG firstImage, PNG secondImage) {
-
+  for (unsigned x = 0; x < secondImage.width(); x++) {
+    for (unsigned y = 0; y < secondImage.height(); y++) {
+      HSLAPixel & pixel = secondImage.getPixel(x, y);
+      HSLAPixel & pixel2 = firstImage.getPixel(x, y);
+      if (pixel.l == 1) {
+        pixel2.l += 0.2;
+      }
+    }
+  }
+  
   return firstImage;
 }
