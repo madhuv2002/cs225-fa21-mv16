@@ -67,6 +67,7 @@ PNG createSpotlight(PNG image, int centerX, int centerY) {
       int diffX = centerX - x;
       int diffY = centerY - y;
       int distance = sqrt((diffX * diffX) + (diffY * diffY));
+      
       // At a distance greater than 160 px away, luminance always decreases by 80%
       if (distance > 160) {
         pixel.l = pixel.l * (0.2);
@@ -94,6 +95,8 @@ PNG illinify(PNG image) {
   for (unsigned x = 0; x < image.width(); x++) {
     for (unsigned y = 0; y < image.height(); y++) {
       HSLAPixel & pixel = image.getPixel(x, y);
+      
+      // If the pixel hue is closer to orange, set it accordingly
       if (pixel.h - 11 < 216 - pixel.h || pixel.h - 216 > 360 - pixel.h) {
         pixel.h = 11;
       } else {
@@ -121,10 +124,10 @@ PNG illinify(PNG image) {
 PNG watermark(PNG firstImage, PNG secondImage) {
   for (unsigned x = 0; x < secondImage.width(); x++) {
     for (unsigned y = 0; y < secondImage.height(); y++) {
-      HSLAPixel & pixel = secondImage.getPixel(x, y);
-      HSLAPixel & pixel2 = firstImage.getPixel(x, y);
-      if (pixel.l == 1) {
-        pixel2.l += 0.2;
+      HSLAPixel & pixel2 = secondImage.getPixel(x, y);
+      HSLAPixel & pixel = firstImage.getPixel(x, y);
+      if (pixel2.l == 1) {
+        pixel.l += 0.2;
       }
     }
   }
