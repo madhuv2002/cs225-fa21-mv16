@@ -27,14 +27,14 @@ PNG grayscale(PNG image) {
   for (unsigned x = 0; x < image.width(); x++) {
     for (unsigned y = 0; y < image.height(); y++) {
       HSLAPixel & pixel = image.getPixel(x, y);
-
+      
       // `pixel` is a pointer to the memory stored inside of the PNG `image`,
       // which means you're changing the image directly.  No need to `set`
       // the pixel since you're directly changing the memory of the image.
       pixel.s = 0;
     }
   }
-
+  
   return image;
 }
 
@@ -72,14 +72,14 @@ PNG createSpotlight(PNG image, int centerX, int centerY) {
       if (distance > 160) {
         pixel.l = pixel.l * (0.2);
       } else {
-      pixel.l = pixel.l * (1  - (0.5 * sqrt((diffX * diffX) + (diffY * diffY))) / 100);
+        pixel.l = pixel.l * (1  - (0.5 * sqrt((diffX * diffX) + (diffY * diffY))) / 100);
       }
     }
   }
   return image;
   
 }
- 
+
 
 /**
  * Returns a image transformed to Illini colors.
@@ -90,7 +90,7 @@ PNG createSpotlight(PNG image, int centerX, int centerY) {
  * @param image A PNG object which holds the image data to be modified.
  *
  * @return The illinify'd image.
-**/
+ **/
 PNG illinify(PNG image) {
   for (unsigned x = 0; x < image.width(); x++) {
     for (unsigned y = 0; y < image.height(); y++) {
@@ -107,20 +107,20 @@ PNG illinify(PNG image) {
   
   return image;
 }
- 
+
 
 /**
-* Returns an immge that has been watermarked by another image.
-*
-* The luminance of every pixel of the second image is checked, if that
-* pixel's luminance is 1 (100%), then the pixel at the same location on
-* the first image has its luminance increased by 0.2.
-*
-* @param firstImage  The first of the two PNGs to be averaged together.
-* @param secondImage The second of the two PNGs to be averaged together.
-*
-* @return The watermarked image.
-*/
+ * Returns an immge that has been watermarked by another image.
+ *
+ * The luminance of every pixel of the second image is checked, if that
+ * pixel's luminance is 1 (100%), then the pixel at the same location on
+ * the first image has its luminance increased by 0.2.
+ *
+ * @param firstImage  The first of the two PNGs to be averaged together.
+ * @param secondImage The second of the two PNGs to be averaged together.
+ *
+ * @return The watermarked image.
+ */
 PNG watermark(PNG firstImage, PNG secondImage) {
   for (unsigned x = 0; x < secondImage.width(); x++) {
     for (unsigned y = 0; y < secondImage.height(); y++) {
