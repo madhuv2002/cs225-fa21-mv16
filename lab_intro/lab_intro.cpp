@@ -61,7 +61,20 @@ PNG grayscale(PNG image) {
  * @return The image with a spotlight.
  */
 PNG createSpotlight(PNG image, int centerX, int centerY) {
-
+  for (unsigned x = 0; x < image.width(); x++) {
+    for (unsigned y = 0; y < image.height(); y++) {
+      HSLAPixel & pixel = image.getPixel(x, y);
+      int diffX = centerX - x;
+      int diffY = centerY - y;
+      int distance = sqrt((diffX * diffX) + (diffY * diffY));
+      // At a distance greater than 160 px away, luminance always decreases by 80%
+      if (distance > 160) {
+        pixel.l = pixel.l * (0.2);
+      } else {
+      pixel.l = pixel.l * (1  - (0.5 * sqrt((diffX * diffX) + (diffY * diffY))) / 100);
+      }
+    }
+  }
   return image;
   
 }
