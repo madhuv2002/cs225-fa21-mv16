@@ -15,7 +15,7 @@ void rotate(std::string inputFile, std::string outputFile) {
   for (unsigned x = 0; x < inputImage.width(); x++) {
     for (unsigned y = 0; y < inputImage.height(); y++) {
       HSLAPixel & pixel1 = inputImage.getPixel(x, y);
-      HSLAPixel & pixel2 = outputImage.getPixel(x, y);
+      HSLAPixel & pixel2 = outputImage.getPixel(inputImage.width() - 1 - x, y);
       pixel2 = pixel1;
     }
   }
