@@ -1,5 +1,6 @@
 #include "cs225/PNG.h"
 #include "cs225/HSLAPixel.h"
+#include <cmath>
 
 #include <string>
 
@@ -25,31 +26,31 @@ void rotate(std::string inputFile, std::string outputFile) {
 cs225::PNG myArt(unsigned int width, unsigned int height) {
   cs225::PNG png(width, height);
   // TODO: Part 3
-  int skyHue = 42;
-  int waterHue = 200;
+  int centerX = width / 2;
+  int centerY = height / 2;
+  int distance = sqrt((height * height) + (width * width));
   for (unsigned x = 0; x < width; x++) {
-    for (unsigned y = 0; y < height; y++) {
+    for (unsigned y = 0; y < height / 1.5; y++) {
       HSLAPixel & pixel = png.getPixel(x, y);
-      if (y < png.height() / 1.75) {
-        pixel.h = skyHue;
-        if (skyHue == 70) {
-          skyHue = 42;
-        } else {
-          skyHue++;
-        }
-      } else {
-        pixel.h = waterHue;
-        if (waterHue == 262) {
-          waterHue = 200;
-        } else {
-          waterHue++;
-        }
-      }
+      int diffX = centerX - x;
+      pixel.h = 100 * (sqrt((diffX * diffX) + 
+        (y * y)) / distance);
       pixel.l = 0.5;
       pixel.s = 0.8;
     }
-  }  
+  }
+  for (unsigned x = 0; x < width; x++) {
+    for (unsigned y = height / 1.5; y < height; y++) {
+      HSLAPixel & pixel = png.getPixel(x, y);
+      int diffX = centerX - x;
+      pixel.h = 300 * (sqrt((diffX * diffX) + 
+        (y * y)) / distance);
+      pixel.l = 0.5;
+      pixel.s = 0.8;
+    }
+  }
   return png;
 }
+
 
 
