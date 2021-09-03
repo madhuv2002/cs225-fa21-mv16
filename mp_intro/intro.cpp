@@ -27,7 +27,7 @@ cs225::PNG myArt(unsigned int width, unsigned int height) {
   cs225::PNG png(width, height);
   // TODO: Part 3
   int centerX = width / 2;
-  int centerY = height / 2;
+  int centerY = height /2;
   int distance = sqrt((height * height) + (width * width));
   for (unsigned x = 0; x < width; x++) {
     for (unsigned y = 0; y < height / 1.5; y++) {
@@ -48,9 +48,15 @@ cs225::PNG myArt(unsigned int width, unsigned int height) {
       pixel.l = 0.5;
       pixel.s = 0.8;
     }
+  }  
+  for (unsigned x = 300; x < 500; x++) {
+    for (unsigned y = 300; y < height / 1.5; y++) {
+      HSLAPixel & pixel = png.getPixel(x, y);
+      int diffX = centerX - x;
+      pixel.h = 0;
+      pixel.l = 0.3;
+      pixel.s = 1;
+    }
   }
   return png;
 }
-
-
-
