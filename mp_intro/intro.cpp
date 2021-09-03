@@ -40,7 +40,7 @@ cs225::PNG myArt(unsigned int width, unsigned int height) {
       pixel.s = 0.8;
     }
   }
-  //spotlight on the sun and decrease luminance further away
+  // spotlight on the sun and decrease luminance further away
   for (unsigned x = 0; x < width; x++) {
     for (unsigned y = 0; y < height; y++) {
       HSLAPixel & pixel = png.getPixel(x, y);
@@ -51,7 +51,10 @@ cs225::PNG myArt(unsigned int width, unsigned int height) {
         pixel.l = pixel.l * (0.8);
       } else {
         if (y < height / 1.5) {
-          pixel.l = pixel.l * (1  - (0.5 * sqrt((diffX * diffX) + (diffY * diffY))) / 100);
+          pixel.h = 150 * (sqrt((diffX * diffX) + 
+            (y * y)) / distance);
+          pixel.l = 0.7;
+          pixel.s = 0.8;
         }
       }
     }
