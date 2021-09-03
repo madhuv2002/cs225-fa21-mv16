@@ -47,7 +47,7 @@ cs225::PNG myArt(unsigned int width, unsigned int height) {
       int diffX = centerX - x;
       int diffY = centerY - y;
       int distance2 = sqrt((diffX * diffX) + (diffY * diffY));
-      if (distance2 > 160) {
+      if (distance2 > (distance / 6)) {
         pixel.l = pixel.l * (0.8);
       } else {
         if (y < height / 1.5) {
