@@ -29,7 +29,7 @@ PNG* setupOutput(unsigned w, unsigned h) {
  * @return a pointer to the color to use when sketchifying
  */
 HSLAPixel* myFavoriteColor() {
-  HSLAPixel* p = new HSLAPixel(222, 0.8, 0.5);
+  HSLAPixel *p = new HSLAPixel(222, 0.8, 0.5);
   return p;
 }
 
@@ -59,9 +59,9 @@ void sketchify(std::string inputFile, std::string outputFile) {
       
       // If the pixel is an edge pixel,
       // color the output pixel with my favorite color
-      HSLAPixel *currOutPixel = &(output)->getPixel(x, y);
+      HSLAPixel &currOutPixel = (output)->getPixel(x, y);
       if (diff > 20) {
-        *currOutPixel = *myPixel;
+        currOutPixel = *myPixel;
       }
     }
   }
