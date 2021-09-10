@@ -5,11 +5,11 @@
 
 #pragma once
 
-#include "PNG.h"
+#include "cs225/PNG.h"
+using namespace cs225;
 
-namespace cs225 {
   class Image : public PNG  {
-    public {
+  public :
     /**
      * Lighten an Image by increasing the luminance
      * of every pixel by 0.1.
@@ -33,7 +33,6 @@ namespace cs225 {
      * of every pixel by amount.
      */
     void darken(double amount);
-    }
     
     /**
      * Saturates an Image by increasing the saturation
@@ -46,7 +45,6 @@ namespace cs225 {
      * of every pixel by amount.
      */
     void saturate(double amount);
-    }
 
     /**
      * Desaturates an Image by decreasing the saturation
@@ -59,7 +57,6 @@ namespace cs225 {
      * of every pixel by amount.
      */
     void desaturate(double amount);
-    }
 
     /**
      * Turns the image grayscale.
@@ -86,5 +83,5 @@ namespace cs225 {
      */
     void scale(unsigned w, unsigned h);
   };
-}
+
 
