@@ -4,4 +4,8 @@
  */
 #pragma once
 
+class StickerSheet {
+public:
+  StickerSheet();
+};
  
