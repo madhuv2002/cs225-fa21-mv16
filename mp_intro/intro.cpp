@@ -11,13 +11,13 @@ void rotate(std::string inputFile, std::string outputFile) {
   // TODO: Part 2
   PNG inputImage;
   inputImage.readFromFile(inputFile);
-  PNG outputImage(inputImage.width(), inputImage.height());
+  PNG * outputImage = new PNG(inputImage.width(), inputImage.height());
   
   for (unsigned x = 0; x < inputImage.width(); x++) {
     for (unsigned y = 0; y < inputImage.height(); y++) {
       HSLAPixel & pixel1 = inputImage.getPixel(x, y);
-      HSLAPixel & pixel2 = outputImage.getPixel(inputImage.width() - 1 - x, inputImage.height() - 1 - y);
-      pixel2 = pixel1;
+      HSLAPixel * pixel2 = outputImage->getPixel(inputImage.width() - 1 - x, inputImage.height() - 1 - y);
+      *pixel2 = pixel1;
     }
   }
   outputImage.writeToFile(outputFile);

@@ -45,6 +45,11 @@ class Allocator
      * @param stream Where to print the results to
      */
     void printRooms(std::ostream & stream = std::cout);
+    
+    /**
+     * Deletes the variables to prevent memory leak
+     */
+    ~Allocator();
 
   private:
     /**
