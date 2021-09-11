@@ -143,14 +143,20 @@ void Image::illinify() {
 }
 
 void Image::scale(double factor) {
-  PNG* scaled = new PNG(factor * this->width(), factor * this->height());
+  // Get the new height/width by multiplying with the factor
   unsigned int width = factor * this->width();
   unsigned int height = factor * this->height();
   
+  // Copy the original image
+  Image image(*this);
+  
+  this->resize(width, height);
+  
   for (unsigned int i = 0; i < width; i++) {
     for (unsigned int j = 0; j < height; j++) {
-      HSLAPixel & original = this->getPixel(i/factor, j/factor);
-      HSLAPixel & pixel = scaled->getPixel(i, j);
+      // Get the original pixel by dividing with the factor
+      HSLAPixel & original = image.getPixel(i / factor, j / factor);
+      HSLAPixel & pixel = this->getPixel(i, j);
       pixel = original;
     }
   }
@@ -158,6 +164,6 @@ void Image::scale(double factor) {
 
 
 void Image::scale(unsigned w, unsigned h) {
-  
-  
+  double factor = w / this->width();
+  scale(factor);
 }
