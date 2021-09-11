@@ -130,8 +130,8 @@ void Image::rotateColor(double degrees) {
 }
 
 void Image::illinify() {
-  for (unsigned i = 0; i < this->width(); i++) {
-    for (unsigned j = 0; j < this->height(); j++) {
+  for (unsigned int i = 0; i < this->width(); i++) {
+    for (unsigned int j = 0; j < this->height(); j++) {
       HSLAPixel & pixel = this->getPixel(i, j);
       if (pixel.h - 11 < 216 - pixel.h || pixel.h - 216 > 360 - pixel.h) {
         pixel.h = 11;
@@ -143,7 +143,17 @@ void Image::illinify() {
 }
 
 void Image::scale(double factor) {
+  PNG* scaled = new PNG(factor * this->width(), factor * this->height());
+  unsigned int width = factor * this->width();
+  unsigned int height = factor * this->height();
   
+  for (unsigned int i = 0; i < width; i++) {
+    for (unsigned int j = 0; j < height; j++) {
+      HSLAPixel & original = this->getPixel(i/factor, j/factor);
+      HSLAPixel & pixel = scaled->getPixel(i, j);
+      pixel = original;
+    }
+  }
 }
 
 
