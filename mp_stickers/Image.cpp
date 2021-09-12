@@ -1,6 +1,7 @@
 #include "Image.h"
 
 using namespace cs225;
+using namespace std;
 void Image::lighten() {
   for (unsigned int i = 0; i < this->width(); i++) {
     for (unsigned int j = 0; j < this->height(); j++) {
@@ -164,6 +165,19 @@ void Image::scale(double factor) {
 
 
 void Image::scale(unsigned w, unsigned h) {
-  double factor = w / this->width();
-  scale(factor);
+  // Get the scaling factor for the width and height 
+  double w_factor = (double)w / this->width();
+  double h_factor = (double)h / this->height();
+  
+  Image image(*this);
+  this->resize(w, h);
+  
+  for (unsigned int i = 0; i < w; i++) {
+    for (unsigned int j = 0; j < h; j++) {
+      // Get the original pixel by dividing with the corresponding factor
+      HSLAPixel & original = image.getPixel(i / w_factor, j / h_factor);
+      HSLAPixel & pixel = this->getPixel(i, j);
+      pixel = original;
+    }
+  }
 }
