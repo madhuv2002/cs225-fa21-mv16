@@ -156,7 +156,7 @@ void Image::scale(double factor) {
   for (unsigned int i = 0; i < width; i++) {
     for (unsigned int j = 0; j < height; j++) {
       // Get the original pixel by dividing with the factor
-      HSLAPixel & original = image.getPixel(i / factor, j / factor);
+      HSLAPixel & original = image.getPixel((double) i / factor, (double) j / factor);
       HSLAPixel & pixel = this->getPixel(i, j);
       pixel = original;
     }
