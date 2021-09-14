@@ -168,16 +168,9 @@ void Image::scale(unsigned w, unsigned h) {
   // Get the scaling factor for the width and height 
   double w_factor = (double)w / this->width();
   double h_factor = (double)h / this->height();
-  
-  Image image(*this);
-  this->resize(w, h);
-  
-  for (unsigned int i = 0; i < w; i++) {
-    for (unsigned int j = 0; j < h; j++) {
-      // Get the original pixel by dividing with the corresponding factor
-      HSLAPixel & original = image.getPixel(i / w_factor, j / h_factor);
-      HSLAPixel & pixel = this->getPixel(i, j);
-      pixel = original;
-    }
+  if (w_factor < h_factor) {
+    scale(w_factor);
+  } else{
+    scale(h_factor);
   }
 }
