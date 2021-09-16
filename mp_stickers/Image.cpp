@@ -1,6 +1,5 @@
 #include "Image.h"
 
-using namespace cs225;
 using namespace std;
 void Image::lighten() {
   for (unsigned int i = 0; i < this->width(); i++) {
