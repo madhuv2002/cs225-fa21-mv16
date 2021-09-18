@@ -19,4 +19,15 @@ public:
   void removeSticker(unsigned index);
   Image * getSticker(unsigned index);
   Image render() const;
+  
+private:
+  Image** images_;
+  unsigned * x_coordinate_;
+  unsigned * y_coordinate_;
+  unsigned index_;
+  unsigned max_;
+  Image baseImage_;
+  
+  clear();
+  copy();
 };
