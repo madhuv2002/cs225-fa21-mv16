@@ -22,12 +22,12 @@ public:
   
 private:
   Image** images_;
-  unsigned * x_coordinate_;
-  unsigned * y_coordinate_;
-  unsigned index_;
-  unsigned max_;
-  Image baseImage_;
+  int * x_coordinate_;
+  int * y_coordinate_;
+  unsigned int index_;
+  unsigned int max_;
+  Image base_picture_;
   
-  clear();
-  copy();
+  void clear();
+  void copy(const StickerSheet &other);
 };
