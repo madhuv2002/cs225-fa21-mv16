@@ -57,14 +57,14 @@ void StickerSheet::changeMaxStickers(unsigned max) {
   Image** temp = new Image*[max]; 
   std::vector<unsigned> tempx;
   std::vector<unsigned> tempy;
-  for(unsigned i = 0; i < max; i++){ 
+  for(unsigned i = 0; i < max; i++) { 
     temp[i] = NULL; 
     tempx.push_back(0);
     tempy.push_back(0);
   } 
   if (index_ >= max){ 
     // if the number of stickers is > max, stickers above max - 1 are lost
-    for (unsigned i = 0; i < max; i++){ 
+    for (unsigned i = 0; i < max; i++) { 
       if (images_[i] != NULL) {
         temp[i] = new Image(*(images_[i]));  
         tempx[i] = x_pos_[i]; 
@@ -75,7 +75,7 @@ void StickerSheet::changeMaxStickers(unsigned max) {
     index_ = max; 
     max_ = max;
   } else if (index_ < max) { 
-    for (unsigned i = 0; i < index_; i++){
+    for (unsigned i = 0; i < index_; i++) {
       if (images_[i] != NULL) {
         temp[i] = new Image(*(images_[i])); 
         tempx[i] = x_pos_[i]; 
@@ -90,7 +90,7 @@ void StickerSheet::changeMaxStickers(unsigned max) {
   y_pos_ = tempy; 
 }
 
-int StickerSheet::addSticker(Image &sticker, unsigned x, unsigned y){ 
+int StickerSheet::addSticker(Image &sticker, unsigned x, unsigned y) { 
   if (index_ < max_) {
     for (unsigned i  = 0; i < max_; i++) {
       if (i == index_) {
@@ -105,8 +105,8 @@ int StickerSheet::addSticker(Image &sticker, unsigned x, unsigned y){
   return -1;
 }
 
-bool StickerSheet::translate(unsigned index, unsigned x, unsigned y){ 
-  if(index >= index_){ 
+bool StickerSheet::translate(unsigned index, unsigned x, unsigned y) { 
+  if(index >= index_) { 
     return false; 
   } else { 
     x_pos_[index] = x; 
@@ -115,11 +115,11 @@ bool StickerSheet::translate(unsigned index, unsigned x, unsigned y){
   }
 }
 
-void StickerSheet::removeSticker(unsigned index){ 
-  if(index < index_){
+void StickerSheet::removeSticker(unsigned index) { 
+  if(index < index_) {
     // Move stickers down by 1 so the lowest index is at the end
     delete images_[index];
-    for(unsigned i = index; i < (index_ - 1); i++){ 
+    for(unsigned i = index; i < (index_ - 1); i++) { 
       images_[i] = images_[i + 1]; 
       x_pos_[i] = x_pos_[i + 1]; 
       y_pos_[i] = y_pos_[i + 1]; 
@@ -130,7 +130,7 @@ void StickerSheet::removeSticker(unsigned index){
 }
 
 Image * StickerSheet::getSticker(unsigned index) {
-  if (index >= index_){ 
+  if (index >= index_) { 
     return NULL;
   } else {
     return images_[index];
