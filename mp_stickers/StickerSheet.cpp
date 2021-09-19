@@ -114,13 +114,13 @@ bool StickerSheet::translate(unsigned index, unsigned x, unsigned y){
 
 void StickerSheet::removeSticker(unsigned index){ 
   if(index < index_){
-    // Move stickers over so the lowest index is at the en
+    // Move stickers over so the lowest index is at the end
+    delete images_[index];
     for(unsigned i = index; i < (index_ - 1); i++){ 
-      *images_[i] = *images_[i + 1]; 
+      images_[i] = images_[i + 1]; 
       x_pos_[i] = x_pos_[i + 1]; 
       y_pos_[i] = y_pos_[i + 1]; 
     } 
-    delete images_[index_ - 1]; 
     images_[index_ - 1] = NULL; 
     index_ --; 
   }
@@ -139,6 +139,7 @@ Image StickerSheet::render() const {
   Image* base_image = new Image(base_picture_);
   unsigned maxw = base_image->width();
   unsigned maxh = base_image->height();
+  // get the max height and width for the box
   for (unsigned i = 0; i < index_; i++) {
     unsigned width = images_[i]->width();
     unsigned height = images_[i]->height();
