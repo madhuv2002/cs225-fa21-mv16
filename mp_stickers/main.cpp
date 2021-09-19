@@ -8,18 +8,21 @@ int main() {
   //   Before exiting main, save your creation to disk as myImage.png
   //
   Image background;
-  background.readFromFile("liyue.png");
+  background.readFromFile("alma.png");
   Image car;
   car.readFromFile("weaslycar.png");
-  Image girl;
-  girl.readFromFile("ganyu.png");
-  Image boy;
-  boy.readFromFile("chong.png");
+  Image harry;
+  harry.readFromFile("harry.png");
+  Image draco;
+  draco.readFromFile("malfoy.png");
+  Image voldemort;
+  voldemort.readFromFile("voldemort.png");
   
-  StickerSheet myImage(background, 3);
-  myImage.addSticker(boy, 160, 180);  
-  myImage.addSticker(girl, 250, 80);
-  myImage.addSticker(car, 20, 20);
+  StickerSheet myImage(background, 4);
+  myImage.addSticker(draco, 50, 350);  
+  myImage.addSticker(harry, 700, 350);
+  myImage.addSticker(car, 100, 40);
+  myImage.addSticker(voldemort, 322, 0);
   Image result = myImage.render();
   result.writeToFile("myImage.png");
   return 0;
