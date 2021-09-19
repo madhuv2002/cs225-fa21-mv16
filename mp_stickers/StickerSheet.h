@@ -8,7 +8,7 @@
 using namespace cs225;
 
 class StickerSheet {
-public:
+  public:
   StickerSheet(const Image &picture, unsigned max);
   ~StickerSheet();
   StickerSheet(const StickerSheet &other);
@@ -22,8 +22,8 @@ public:
   
 private:
   Image** images_;
-  int * x_coordinate_;
-  int * y_coordinate_;
+  unsigned * x_pos_;
+  unsigned * y_pos_;
   unsigned int index_;
   unsigned int max_;
   Image base_picture_;
