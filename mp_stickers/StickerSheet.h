@@ -5,6 +5,7 @@
 
 #pragma once
 #include "Image.h"
+#include <vector>
 using namespace cs225;
 
 class StickerSheet {
@@ -22,8 +23,8 @@ class StickerSheet {
   
 private:
   Image** images_;
-  unsigned * x_pos_;
-  unsigned * y_pos_;
+  std::vector<unsigned> x_pos_;
+  std::vector<unsigned> y_pos_;
   unsigned int index_;
   unsigned int max_;
   Image base_picture_;
