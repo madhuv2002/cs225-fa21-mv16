@@ -90,7 +90,7 @@ void StickerSheet::changeMaxStickers(unsigned max) {
 int StickerSheet::addSticker(Image &sticker, unsigned x, unsigned y){ 
   if (index_ < max_) {
     for (unsigned i  = 0; i < max_; i++) {
-      if (images_[i] == NULL) {
+      if (i == index_) {
         images_[i] = new Image(sticker);
         x_pos_[i] = x;
         y_pos_[i] = y;
