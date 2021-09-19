@@ -63,6 +63,7 @@ void StickerSheet::changeMaxStickers(unsigned max) {
     tempy.push_back(0);
   } 
   if (index_ >= max){ 
+    // if the number of stickers is > max, some stickers are lost
     for (unsigned i = 0; i < max; i++){ 
       if (images_[i] != NULL) {
         temp[i] = new Image(*(images_[i]));  
@@ -70,8 +71,9 @@ void StickerSheet::changeMaxStickers(unsigned max) {
         tempy[i] = y_pos_[i]; 
       } 
     }
+    // update the number of stickers
     index_ = max; 
-  } else if(index_ < max){ 
+  } else if (index_ < max) { 
     for (unsigned i = 0; i < index_; i++){
       if (images_[i] != NULL) {
         temp[i] = new Image(*(images_[i])); 
@@ -114,7 +116,7 @@ bool StickerSheet::translate(unsigned index, unsigned x, unsigned y){
 
 void StickerSheet::removeSticker(unsigned index){ 
   if(index < index_){
-    // Move stickers over so the lowest index is at the end
+    // Move stickers down by 1 so the lowest index is at the end
     delete images_[index];
     for(unsigned i = index; i < (index_ - 1); i++){ 
       images_[i] = images_[i + 1]; 

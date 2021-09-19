@@ -9,17 +9,17 @@ int main() {
   //
   Image background;
   background.readFromFile("liyue.png");
-  Image bird;
-  bird.readFromFile("bird.png");
+  Image car;
+  car.readFromFile("weaslycar.png");
   Image girl;
   girl.readFromFile("ganyu.png");
   Image boy;
   boy.readFromFile("chong.png");
   
   StickerSheet myImage(background, 3);
-  myImage.addSticker(bird, 800, 200);
-  myImage.addSticker(girl, 1700, 2000);
-  myImage.addSticker(boy, 2500, 1000);  
+  myImage.addSticker(boy, 160, 180);  
+  myImage.addSticker(girl, 250, 80);
+  myImage.addSticker(car, 20, 20);
   Image result = myImage.render();
   result.writeToFile("myImage.png");
   return 0;
