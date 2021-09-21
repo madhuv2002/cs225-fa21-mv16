@@ -23,6 +23,7 @@ void StickerSheet::clear() {
     delete images_[i];
   }
   delete[] images_;
+  images_ = NULL;
 }
 
 StickerSheet::StickerSheet(const StickerSheet &other) {
@@ -54,14 +55,6 @@ const StickerSheet& StickerSheet::operator=(const StickerSheet &other) {
 }
 
 void StickerSheet::changeMaxStickers(unsigned max) {
-  Image** temp = new Image*[max]; 
-  std::vector<unsigned> tempx;
-  std::vector<unsigned> tempy;
-  for(unsigned i = 0; i < max; i++) { 
-    temp[i] = NULL; 
-    tempx.push_back(0);
-    tempy.push_back(0);
-  } 
   if (index_ >= max){ 
     // if the number of stickers is > max, delete the lost stickers
     for (unsigned i = max; i < index_; i++) { 
@@ -73,7 +66,15 @@ void StickerSheet::changeMaxStickers(unsigned max) {
     // update the number of stickers
     index_ = max; 
     max_ = max;
-  } else if (index_ < max) { 
+  } else if (index_ < max) {   
+    Image** temp = new Image*[max]; 
+    std::vector<unsigned> tempx;
+    std::vector<unsigned> tempy;
+    for(unsigned i = 0; i < max; i++) { 
+      temp[i] = NULL; 
+      tempx.push_back(0);
+      tempy.push_back(0);
+    } 
     for (unsigned i = 0; i < index_; i++) {
       if (images_[i] != NULL) {
         temp[i] = new Image(*(images_[i])); 
@@ -83,9 +84,10 @@ void StickerSheet::changeMaxStickers(unsigned max) {
     } 
     max_ = max;
     clear();
-    images_ = temp; 
-    x_pos_ = tempx; 
+    images_ = temp;
+    x_pos_ = tempx;
     y_pos_ = tempy;
+    temp = NULL;
   }
 }
 
@@ -138,9 +140,9 @@ Image * StickerSheet::getSticker(unsigned index) {
 
 
 Image StickerSheet::render() const {
-  Image* base_image = new Image(base_picture_);
-  unsigned maxw = base_image->width();
-  unsigned maxh = base_image->height();
+  Image base_image = (base_picture_);
+  unsigned maxw = base_image.width();
+  unsigned maxh = base_image.height();
   // get the max height and width for the box
   for (unsigned i = 0; i < index_; i++) {
     unsigned width = images_[i]->width();
@@ -153,12 +155,12 @@ Image StickerSheet::render() const {
     }
   }
   
-  base_image->resize(maxw, maxh);
+  base_image.resize(maxw, maxh);
   
   for (unsigned i = 0; i < index_; i++) {
     for (unsigned x = 0; x < images_[i]->width(); x++) {
       for (unsigned y = 0; y < images_[i]->height(); y++) {
-        HSLAPixel & s_pix = base_image->getPixel(x + x_pos_[i], y + y_pos_[i]);
+        HSLAPixel & s_pix = base_image.getPixel(x + x_pos_[i], y + y_pos_[i]);
         HSLAPixel & i_pix = images_[i]->getPixel(x, y);
         if (i_pix.a != 0) {
           s_pix = i_pix;
@@ -166,6 +168,6 @@ Image StickerSheet::render() const {
       }
     }
   }
-  return *base_image;
+  return base_image;
   
 }
