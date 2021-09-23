@@ -115,12 +115,13 @@ typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
   if (curr == NULL) {
     return curr;
   }
+  
   if (splitPoint == 0) {
     return curr;
   }
+  ListNode* temp = start;
   
-  ListNode* temp;
-  for (int i = 0; i < splitPoint; i++) {
+  for (int i = 0; i < splitPoint && curr != NULL; i++) {
     temp = curr;
     curr = curr->next;
   }
@@ -141,7 +142,7 @@ typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
 template <typename T>
 void List<T>::tripleRotate() {
   // @todo Graded in MP3.1
-  
+
 }
 
 

@@ -29,11 +29,20 @@ namespace QuackFun {
 template <typename T>
 T sum(stack<T>& s)
 {
-
-    // Your code here
-    return T(); // stub return value (0 for primitive types). Change this!
-                // Note: T() is the default value for objects, and 0 for
-                // primitive types
+  // Your code here
+  // Base case
+  if (s.empty()) {
+    return 0;
+  }
+  T num = s.top();
+  s.pop();
+  T result = num + sum(s);
+  s.push(num);
+  return result;
+  
+  // return T(); // stub return value (0 for primitive types). Change this!
+  // Note: T() is the default value for objects, and 0 for
+  // primitive types
 }
 
 /**
@@ -55,9 +64,44 @@ T sum(stack<T>& s)
  */
 bool isBalanced(queue<char> input)
 {
-
-    // @TODO: Make less optimistic
+  
+  if (input.empty()) {
     return true;
+  }
+  // @TODO: Make less optimistic
+  stack<char> s;
+  while (!input.empty()) {
+    if (input.front() == '[' || input.front() == ']') {
+      s.push(input.front()); 
+    }
+    input.pop();
+  }
+  
+  if (s.empty()) {
+    return true;
+  }
+  
+  if (s.top() == '[' || s.size() % 2 != 0) {
+    return false;
+  } 
+  
+  int countO = 0;
+  int countC = 0;
+  
+  while (!s.empty()) {
+    if (s.top() == ']') {
+      countC++;
+    }
+    if (s.top() == '[') {
+      countO++;
+    }
+    s.pop();
+    if (countC < countO) {
+      return false;
+    }
+  }
+  
+  return (countO == countC);
 }
 
 /**
@@ -78,9 +122,40 @@ bool isBalanced(queue<char> input)
 template <typename T>
 void scramble(queue<T>& q)
 {
-    stack<T> s;
-    // optional: queue<T> q2;
-
-    // Your code here
+  stack<T> s;
+  // optional: 
+  queue<T> q2;
+  
+  // Your code here
+  int index = 1;
+  while (!q.empty()) {
+    if (index % 2 != 0) {
+      for (int i = 0; i < index; i++) {
+        if (!q.empty()) {
+          q2.push(q.front());
+          q.pop();
+        }
+      }
+    } else {
+      for (int i = 0; i < index; i++) {
+        if (!q.empty()) {
+          s.push(q.front());
+          q.pop();
+        }
+      }
+      
+      while (!s.empty()) {
+        q2.push(s.top());
+        s.pop();
+      }
+    }
+    index++;
+  }
+  
+  while (!q2.empty()) {
+    q.push(q2.front());
+    q2.pop();
+  }
+  
 }
 }
