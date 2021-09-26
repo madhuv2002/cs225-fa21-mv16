@@ -145,39 +145,37 @@ void List<T>::tripleRotate() {
   ListNode *curr = head_; 
   
   if (!(length_ < 3)) { 
+    head_ = curr->next;
     for (int i = 0; i < length_/3; i++) {
       // Create temp values for the 3 digits to rotate
       ListNode *one = curr;
       ListNode *two = curr->next;
       ListNode *three = curr->next->next;
       
+      // update what the value after the third one points to
+      // ex: 1, 2, 3, 4 : 4->prev should point to 1 after tripleRotate()
       if(three->next != NULL) { 
         three->next->prev = one;
+        one->next = three->next;
+      } else {
+        one->next = NULL;
       }
       
-      if(one->prev != NULL) { 
-        one->prev->next = two;
-        one->next->prev = one->prev;
+      // update what the first value->prev should point to
+      // _, _, 0, 1, 2, 3 : 0->next should point to 2 / vice-versa after tripleRotate()
+      if(one->prev == NULL) { 
+        two->prev = NULL;
       } else {
-        one->next->prev = NULL;
+        one->prev->next = two;
       }
       // Rearrange so 1,2,3 becomes 2,3,1
-      two->prev = one->prev; 
       two->next = three;
-      
-      one->next = three->next; 
-      one->prev = three; 
-      
-      three->next = one; 
-      three->prev = two; 
+      three->next = one;
+      two->prev = one->prev;
+      one->prev = three;
+      three->prev = two;
       curr = one->next; 
-      if (i % 3 == 0) {
-        head_ = two;
-      }
     }
-  }
-  if (curr == NULL) {
-    tail_ = tail_->next;
   }
 }
 
@@ -204,6 +202,9 @@ void List<T>::reverse() {
 template <typename T>
 void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
   /// @todo Graded in MP3.2
+  if (startPoint == endPoint) {
+    return;
+  }
 }
 
 /**
