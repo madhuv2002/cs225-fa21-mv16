@@ -147,7 +147,7 @@ void List<T>::tripleRotate() {
   if (!(length_ < 3)) { 
     head_ = curr->next;
     for (int i = 0; i < length_/3; i++) {
-      // Create temp values for the 3 digits to rotate
+      // Create temp pointers for the 3 digits to rotate
       ListNode *one = curr;
       ListNode *two = curr->next;
       ListNode *three = curr->next->next;
@@ -167,11 +167,11 @@ void List<T>::tripleRotate() {
         two->prev = NULL;
       } else {
         one->prev->next = two;
+        two->prev = one->prev;
       }
       // Rearrange so 1,2,3 becomes 2,3,1
       two->next = three;
       three->next = one;
-      two->prev = one->prev;
       one->prev = three;
       three->prev = two;
       curr = one->next; 
