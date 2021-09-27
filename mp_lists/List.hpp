@@ -145,16 +145,16 @@ void List<T>::tripleRotate() {
     for (int i = 0; i < length_/3; i++) {
       // Create temp pointers for the 3 digits to rotate
       ListNode * one = curr;
-      ListNode * two = curr->next ;
+      ListNode * two = curr->next;
       ListNode * three = curr->next->next;
       
       // update what the value after the third one points to
       // ex: 1, 2, 3, 4 : 4->prev should point to 1 after tripleRotate()
-      if(three->next != NULL) { 
+      if(three->next == NULL) { 
+        one->next = NULL;
+      } else {
         three->next->prev = one;
         one->next = three->next;
-      } else {
-        one->next = NULL;
       }
       
       // update what the first value->prev should point to
@@ -201,6 +201,31 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
   if (startPoint == endPoint) {
     return;
   }
+  ListNode * pre = startPoint->prev;
+  ListNode * end = endPoint->next;
+  ListNode * curr = startPoint;
+  
+  while (curr != endPoint) {
+    ListNode * temp = curr->next;
+    curr->next = curr->prev;
+    curr->prev = temp;
+    curr= temp;
+  }
+  endPoint->next = curr->prev;
+  endPoint->prev= pre;
+  startPoint->next = end;
+  
+  // Update the head and tail accordingly
+  if (pre != NULL) {
+    pre->next = endPoint;
+  } else {
+    head_ = endPoint;
+  }
+  if (end != NULL) {
+    end->prev = startPoint;
+  } else {
+    tail_ = startPoint;
+  }
 }
 
 /**
@@ -212,6 +237,18 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
 template <typename T>
 void List<T>::reverseNth(int n) {
   /// @todo Graded in MP3.2
+  ListNode * start = head_;
+  
+  while (start != NULL) {
+    ListNode * end = start;
+    for (int i = 1; i < n; i++) {
+      if (end->next != NULL) {
+        end = end->next;
+      }
+    }
+    reverse(start, end);
+    start = start->next;
+  }
 }
 
 
