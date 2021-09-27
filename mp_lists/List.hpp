@@ -80,15 +80,16 @@ template <typename T>
 void List<T>::insertBack(const T & ndata) {
   /// @todo Graded in MP3.1  
   ListNode * newNode = new ListNode(ndata);
-  if (head_ == NULL && tail_ == NULL) {
+  if (length_ == 0) {
     head_ = newNode;
     tail_ = newNode;
-    length_++;
   } else {
     tail_->next = newNode;
+    newNode->next = NULL;
+    newNode->prev = tail_;
     tail_ = newNode;
-    length_++;
   }
+  length_++;
 }
 
 /**
@@ -111,21 +112,16 @@ template <typename T>
 typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
   /// @todo Graded in MP3.1
   ListNode * curr = start;
-  
   if (curr == NULL) {
-    return curr;
+    return NULL;
   }
-  
-  if (splitPoint == 0) {
-    return curr;
-  }
-  ListNode* temp = start;
   
   for (int i = 0; i < splitPoint && curr != NULL; i++) {
-    temp = curr;
     curr = curr->next;
   }
-  temp->next = NULL;
+  
+  curr->prev->next = NULL;
+  curr->prev = NULL;
   return curr;
 }
 
@@ -142,15 +138,15 @@ typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
 template <typename T>
 void List<T>::tripleRotate() {
   // @todo Graded in MP3.1
-  ListNode *curr = head_; 
+  ListNode * curr = head_; 
   
   if (!(length_ < 3)) { 
     head_ = curr->next;
     for (int i = 0; i < length_/3; i++) {
       // Create temp pointers for the 3 digits to rotate
-      ListNode *one = curr;
-      ListNode *two = curr->next;
-      ListNode *three = curr->next->next;
+      ListNode * one = curr;
+      ListNode * two = curr->next ;
+      ListNode * three = curr->next->next;
       
       // update what the value after the third one points to
       // ex: 1, 2, 3, 4 : 4->prev should point to 1 after tripleRotate()
