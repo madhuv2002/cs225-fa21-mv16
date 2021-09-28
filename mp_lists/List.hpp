@@ -119,6 +119,9 @@ typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
   if (splitPoint == 0) {
     return curr;
   }
+  if (splitPoint >= length_) {
+    return curr;
+  }
   
   for (int i = 0; i < splitPoint && curr != NULL; i++) {
     curr = curr->next;
