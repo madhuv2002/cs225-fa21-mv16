@@ -170,9 +170,12 @@ class BinaryTree
          * @param subRoot The current node in the recursion
          */
         void printLeftToRight(const Node* subRoot) const;
-
-
-
+        
+        /**
+         * Private helper function for the public mirror function.
+         * @param subRoot The current node in the recursion
+         */
+        void mirror(Node* subRoot) const;
 
         /**
          * Private helper function for the sorted public insert function.
