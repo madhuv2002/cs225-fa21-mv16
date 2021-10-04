@@ -130,6 +130,25 @@ template <typename T>
 bool BinaryTree<T>::isOrderedRecursive() const
 {
   // your code here
-  return false;
+  return isOrderedRecursive(root, NULL, NULL);
+}
+
+template <typename T>
+bool BinaryTree<T>::isOrderedRecursive(Node* subRoot, Node* min, Node* max) const
+{
+  // your code here
+  if (subRoot == NULL) {
+    return true;
+  }
+  if (min == NULL && max== NULL) {
+    return isOrderedRecursive(subRoot->left, min, subRoot) && isOrderedRecursive(subRoot->right, subRoot, max);
+  }
+  if (min == NULL && subRoot->elem < max->elem) {
+    return isOrderedRecursive(subRoot->left, min, subRoot) && isOrderedRecursive(subRoot->right, subRoot, max);
+  }
+  if (max == NULL && subRoot->elem > min->elem) {
+    return isOrderedRecursive(subRoot->left, min, subRoot) && isOrderedRecursive(subRoot->right, subRoot, max);
+  }
+  return (subRoot->elem < max->elem && subRoot->elem > min->elem && isOrderedRecursive(subRoot->left, min, subRoot) && isOrderedRecursive(subRoot->right, subRoot, max));
 }
 
