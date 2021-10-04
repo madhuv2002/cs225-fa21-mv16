@@ -109,7 +109,15 @@ template <typename T>
 bool BinaryTree<T>::isOrderedIterative() const
 {
   // your code here
-  return false;
+  InorderTraversal<T> t(root);
+  T check = (*t.begin())->elem;
+  for (typename TreeTraversal<T>::Iterator it = t.begin(); it != t.end(); ++it) {
+    if (check > ((*it)->elem)) {
+      return false;
+    }
+    check = (*it)->elem;
+  }
+  return true;
 }
 
 /**
