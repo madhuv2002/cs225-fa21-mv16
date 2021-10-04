@@ -249,12 +249,13 @@ void List<T>::reverseNth(int n) {
   
   while (start != NULL) {
     ListNode * end = start;
-    for (int i = 1; i < n; i++) {
+    for (int i = 0; i < n - 1; i++) {
       if (end->next != NULL) {
         end = end->next;
       }
     }
     reverse(start, end);
+    // reverse flips the head and tail pointers so start is now end
     start = start->next;
   }
 }
@@ -298,7 +299,50 @@ void List<T>::mergeWith(List<T> & otherList) {
 template <typename T>
 typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) {
   /// @todo Graded in MP3.2
-  return NULL;
+  if (first == NULL && second == NULL) {
+    return NULL;
+  }
+  if (first == NULL) {
+    return second;
+  }
+  if (second == NULL) {
+    return first;
+  }
+  
+  ListNode * curr;
+  
+  if (first->data < second->data) {
+    curr = first;
+    first = first->next;
+  } else {
+    curr = second;
+    second = second->next;
+  }
+  ListNode * curr2 = curr;
+  
+  while (first && second) {
+    ListNode * temp;
+    if (first->data < second->data) {
+      temp = first;
+      first->prev = curr2;
+      first = first->next;
+      curr2->next = temp;
+    } else {
+      temp = second;
+      second->prev = curr2;
+      second = second->next;
+      curr2->next = temp;
+    }
+    curr2 = temp;
+  }
+  
+  if (first == NULL && second != NULL) {
+    curr2->next = second;
+  }
+  if (first != NULL && second == NULL) {
+    curr2->next = first;
+  }
+  return curr;
 }
 
 /**
@@ -315,5 +359,14 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
 template <typename T>
 typename List<T>::ListNode* List<T>::mergesort(ListNode * start, int chainLength) {
   /// @todo Graded in MP3.2
+  if (chainLength == 1) {
+    return start;
+  }
+  
+  ListNode* temp = split(start, chainLength/2);
+  ListNode* first = mergesort(start, chainLength/2);
+  ListNode* second = mergesort(temp, chainLength - chainLength/2);
+  start = merge(first, second);
+  return start;
   return NULL;
 }
