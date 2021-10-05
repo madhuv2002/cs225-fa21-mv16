@@ -338,9 +338,11 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
   
   if (first == NULL && second != NULL) {
     curr2->next = second;
+    second->prev = curr2;
   }
   if (first != NULL && second == NULL) {
     curr2->next = first;
+    first->prev = curr2;
   }
   // return the head
   return curr;
