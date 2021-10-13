@@ -7,6 +7,8 @@
 #include "../cs225/HSLAPixel.h"
 #include "../cs225/PNG.h"
 #include "../Point.h"
+#include <stack>
+#include <vector>
 
 using namespace cs225;
 
@@ -36,13 +38,17 @@ public:
 
     /** @todo [Part 1] */
     /** add member functions if neccesary*/
-    Iterator(ImageTraversal* traversal);
+    Iterator(PNG png, Point start, double tolerance, ImageTraversal* traversal);
     
   private:
     /** @todo [Part 1] */
     /** add private members here if neccesary*/
     ImageTraversal* traversal_;
-    Point curr_;
+    PNG png_;
+    double tolerance_;
+    Point start_;
+    Point current_;
+    std::vector<std::vector<bool>> visited;
   };
 
   /**
@@ -79,5 +85,5 @@ public:
   virtual bool empty() const = 0;
 
 private:
-  static double calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2);  
+  static double calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2); 
 };
