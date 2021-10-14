@@ -33,23 +33,23 @@ double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2
  */
 ImageTraversal::Iterator::Iterator() {
   /** @todo [Part 1] */
-  current_ = Point(-1, 1);
+  traversal_ = NULL;
 }
 
 ImageTraversal::Iterator::Iterator(PNG png, Point start, double tolerance, ImageTraversal* traversal) {
   /** @todo [Part 1] */
   traversal_ = traversal;
-  current_ = start;
   png_ = png;
   start_ = start;
+  current_ = start;
   tolerance_ = tolerance;
   
   visited.resize(png_.width());
   for (unsigned i = 0; i < visited.size(); i++) {
     visited[i].resize(png_.height());
   }
-  for (unsigned i = 0; i < visited.size(); i++) {
-    for (unsigned j = 0; j < visited[i].size(); j++) {
+  for (unsigned i = 0; i < png_.width(); i++) {
+    for (unsigned j = 0; j < png_.height(); j++) {
       visited[i][j] = false;
     }
   }
@@ -63,53 +63,54 @@ ImageTraversal::Iterator::Iterator(PNG png, Point start, double tolerance, Image
  */
 ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   /** @todo [Part 1] */
-  Point top = traversal_->pop();
-  visited[top.x][top.y] = true;
+  Point temp = traversal_->pop();
   
-  Point right(top.x + 1, top.y);
-  Point below(top.x, top.y + 1);
-  Point left(top.x - 1, top.y);
-  Point above(top.x, top.y - 1);
+  Point right(temp.x + 1, temp.y);
+  Point below(temp.x, temp.y + 1);
+  Point left(temp.x - 1, temp.y);
+  Point above(temp.x, temp.y - 1);
   
   HSLAPixel & p1 = png_.getPixel(start_.x, start_.y);
   
-  if(right.x < png_.width() && right.y < png_.height() && right.x > 0 && right.y > 0){
+  if(right.x < png_.width() && visited[right.x][right.y] == false){
     HSLAPixel & p2 = png_.getPixel(right.x, right.y);
-    double delta = calculateDelta(p1, p2);
-    if (!(delta >= tolerance_)) {
+    double delta = calculateDelta(p2, p1);
+    if ((delta < tolerance_)) {
       traversal_->add(right);
     }
   }
   
-  if(below.y < png_.height() && below.x < png_.width() && below.x > 0 && below.y > 0){
+  if(below.y < png_.height() && visited[below.x][below.y] == false){
     HSLAPixel & p2 = png_.getPixel(below.x, below.y);
-    double delta = calculateDelta(p1, p2);
-    if (!(delta >= tolerance_)) {
+    double delta = calculateDelta(p2, p1);
+    if ((delta < tolerance_)) {
       traversal_->add(below);
     }
   }
   
-  if(left.x < png_.width() && left.y < png_.height() && left.x > 0 && left.y > 0){
+  if(left.x > 0 && left.x < png_.width() && visited[left.x][left.y] == false){
     HSLAPixel & p2 = png_.getPixel(left.x, left.y);
-    double delta = calculateDelta(p1, p2);
-    if (!(delta >= tolerance_)) {
+    double delta = calculateDelta(p2, p1);
+    if ((delta < tolerance_)) {
       traversal_->add(left);
     }
   }
   
-  if(above.y < png_.height() && above.x < png_.width() && above.x > 0 && above.y > 0){
+  if(above.y > 0 && above.y < png_.height() && visited[above.x][above.y] == false){
     HSLAPixel & p2 = png_.getPixel(above.x, above.y);
-    double delta = calculateDelta(p1, p2);
-    if (!(delta >= tolerance_)) {
+    double delta = calculateDelta(p2, p1);
+    if ((delta < tolerance_)) {
       traversal_->add(above);
     }
   }
+  visited[temp.x][temp.y] = true;
   
   while(!traversal_->empty() && visited[traversal_->peek().x][traversal_->peek().y]){
     traversal_->pop();
   }
 
   if(traversal_->empty()) {
+    traversal_ = NULL;
     return *this;
   } else {
     current_ = traversal_->peek();
@@ -135,6 +136,6 @@ Point ImageTraversal::Iterator::operator*() {
  */
 bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator &other) {
   /** @todo [Part 1] */
-  return !(current_ == other.current_);
+  return !(traversal_ == other.traversal_);
 }
 
