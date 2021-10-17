@@ -143,6 +143,7 @@ void AVLTree<K, V>::remove(Node*& subtree, const K& key)
       // your code here
       delete subtree;
       subtree = NULL;
+      return;
     } else if (subtree->left != NULL && subtree->right != NULL) {
       /* two-child remove */
       // your code here
@@ -152,7 +153,6 @@ void AVLTree<K, V>::remove(Node*& subtree, const K& key)
       }
       swap(temp, subtree);
       remove(subtree->left, key);
-      rebalance(temp);
     } else {
       /* one-child remove */
       // your code here
