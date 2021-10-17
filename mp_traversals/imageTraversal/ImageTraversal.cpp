@@ -45,15 +45,13 @@ ImageTraversal::Iterator::Iterator(PNG png, Point start, double tolerance, Image
   tolerance_ = tolerance;
   
   visited.resize(png_.width());
-  for (unsigned i = 0; i < visited.size(); i++) {
-    visited[i].resize(png_.height());
-  }
   for (unsigned i = 0; i < png_.width(); i++) {
+    visited[i].resize(png_.height());
     for (unsigned j = 0; j < png_.height(); j++) {
       visited[i][j] = false;
     }
   }
-  
+  visited[start.x][start.y] = true;
 }
 
 /**
@@ -103,6 +101,7 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
       traversal_->add(above);
     }
   }
+  
   visited[temp.x][temp.y] = true;
   
   while(!traversal_->empty() && visited[traversal_->peek().x][traversal_->peek().y]){
