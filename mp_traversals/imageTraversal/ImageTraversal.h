@@ -48,7 +48,7 @@ public:
     double tolerance_;
     Point start_;
     Point current_;
-    std::vector<std::vector<bool>> visited;
+    std::vector<std::vector<bool>> visited_;
   };
 
   /**

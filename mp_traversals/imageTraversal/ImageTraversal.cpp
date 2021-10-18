@@ -20,11 +20,11 @@ double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2
   double h = fabs(p1.h - p2.h);
   double s = p1.s - p2.s;
   double l = p1.l - p2.l;
-
+  
   // Handle the case where we found the bigger angle between two hues:
   if (h > 180) { h = 360 - h; }
   h /= 360;
-
+  
   return sqrt( (h*h) + (s*s) + (l*l) );
 }
 
@@ -38,20 +38,21 @@ ImageTraversal::Iterator::Iterator() {
 
 ImageTraversal::Iterator::Iterator(PNG png, Point start, double tolerance, ImageTraversal* traversal) {
   /** @todo [Part 1] */
-  traversal_ = traversal;
   png_ = png;
   start_ = start;
   current_ = start;
   tolerance_ = tolerance;
+  traversal_ = traversal;
   
-  visited.resize(png_.width());
-  for (unsigned i = 0; i < png_.width(); i++) {
-    visited[i].resize(png_.height());
-    for (unsigned j = 0; j < png_.height(); j++) {
-      visited[i][j] = false;
+  visited_.resize(png_.width());
+  for(unsigned int i = 0; i < png_.width(); i++) {
+    visited_[i].resize(png_.height());
+  }
+  for(unsigned int i = 0; i < png_.width(); i++) {
+    for(unsigned int j = 0; j < png_.height(); j++) {
+      visited_[i][j] = false;
     }
   }
-  visited[start.x][start.y] = true;
 }
 
 /**
@@ -61,62 +62,54 @@ ImageTraversal::Iterator::Iterator(PNG png, Point start, double tolerance, Image
  */
 ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   /** @todo [Part 1] */
-  Point temp = traversal_->pop();
+  Point curr = traversal_->pop(); 
   
-  Point right(temp.x + 1, temp.y);
-  Point below(temp.x, temp.y + 1);
-  Point left(temp.x - 1, temp.y);
-  Point above(temp.x, temp.y - 1);
-  
+  Point right = Point(curr.x + 1, curr.y); 
+  Point below = Point(curr.x, curr.y + 1);
+  Point left = Point(curr.x - 1, curr.y); 
+  Point above = Point(curr.x, curr.y - 1); 
   HSLAPixel & p1 = png_.getPixel(start_.x, start_.y);
   
-  if(right.x < png_.width() && visited[right.x][right.y] == false){
-    HSLAPixel & p2 = png_.getPixel(right.x, right.y);
-    double delta = calculateDelta(p2, p1);
-    if ((delta < tolerance_)) {
-      traversal_->add(right);
+  if (right.x < png_.width() && visited_[right.x][right.y] == false) {
+      HSLAPixel & p2 = png_.getPixel(right.x, right.y);
+      if(calculateDelta(p1, p2) < tolerance_) { 
+        traversal_->add(right); 
     }
   }
   
-  if(below.y < png_.height() && visited[below.x][below.y] == false){
+  if (below.y < png_.height() && visited_[below.x][below.y] == false) {
     HSLAPixel & p2 = png_.getPixel(below.x, below.y);
-    double delta = calculateDelta(p2, p1);
-    if ((delta < tolerance_)) {
-      traversal_->add(below);
+    if(calculateDelta(p1, p2) < tolerance_) { 
+      traversal_->add(below); 
     }
   }
   
-  if(left.x > 0 && left.x < png_.width() && visited[left.x][left.y] == false){
+  if (left.x < png_.width() && left.x >= 0 && visited_[left.x][left.y] == false) {
     HSLAPixel & p2 = png_.getPixel(left.x, left.y);
-    double delta = calculateDelta(p2, p1);
-    if ((delta < tolerance_)) {
-      traversal_->add(left);
+    if(calculateDelta(p1, p2) < tolerance_) { 
+      traversal_->add(left); 
     }
   }
   
-  if(above.y > 0 && above.y < png_.height() && visited[above.x][above.y] == false){
+  if (above.y < png_.height() && above.y >= 0 && visited_[above.x][above.y] == false) {
     HSLAPixel & p2 = png_.getPixel(above.x, above.y);
-    double delta = calculateDelta(p2, p1);
-    if ((delta < tolerance_)) {
-      traversal_->add(above);
+    if(calculateDelta(p1, p2) < tolerance_) { 
+      traversal_->add(above); 
     }
   }
   
-  visited[temp.x][temp.y] = true;
   
-  while(!traversal_->empty() && visited[traversal_->peek().x][traversal_->peek().y]){
-    traversal_->pop();
+  visited_[curr.x][curr.y] = true;
+  while(!traversal_->empty() && (visited_[traversal_->peek().x][traversal_->peek().y])) {
+    traversal_->pop(); 
   }
-
-  if(traversal_->empty()) {
-    traversal_ = NULL;
-    return *this;
-  } else {
+  if(traversal_->empty() == false) { 
     current_ = traversal_->peek();
-    return *this;
+  } else {
+    traversal_ = NULL;
   }
+  return *this;
 }
-
 
 /**
  * Iterator accessor opreator.
