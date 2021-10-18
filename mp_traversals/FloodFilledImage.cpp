@@ -60,13 +60,11 @@ Animation FloodFilledImage::animate(unsigned frameInterval) const {
   for (unsigned int i = 0; i < traversal_.size(); i++) {
     animation.addFrame(temp);
     unsigned int count = 1;
-    for (const Point & curr: *traversal_[i]) {
-      
+    for (auto curr: *traversal_[i]) {
       temp.getPixel(curr.x, curr.y) = colors_[i]->getColor(curr.x, curr.y);
       if (count % frameInterval == 0) {
         animation.addFrame(temp);
       }
-      
       count++;
     }
     animation.addFrame(temp);

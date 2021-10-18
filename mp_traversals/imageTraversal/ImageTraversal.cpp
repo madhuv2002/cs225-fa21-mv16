@@ -47,8 +47,6 @@ ImageTraversal::Iterator::Iterator(PNG png, Point start, double tolerance, Image
   visited_.resize(png_.width());
   for(unsigned int i = 0; i < png_.width(); i++) {
     visited_[i].resize(png_.height());
-  }
-  for(unsigned int i = 0; i < png_.width(); i++) {
     for(unsigned int j = 0; j < png_.height(); j++) {
       visited_[i][j] = false;
     }
@@ -103,7 +101,7 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   while(!traversal_->empty() && (visited_[traversal_->peek().x][traversal_->peek().y])) {
     traversal_->pop(); 
   }
-  if(traversal_->empty() == false) { 
+  if(!(traversal_->empty())) { 
     current_ = traversal_->peek();
   } else {
     traversal_ = NULL;
