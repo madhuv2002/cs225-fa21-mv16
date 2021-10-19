@@ -13,8 +13,7 @@ using namespace cs225;
  */
 HSLAPixel MyColorPicker::getColor(unsigned x, unsigned y) {
   /* @todo [Part 3] */
-  
-  int num = (x*4 + y*4);
+  int num = (x * 3 + y * 3);
   unsigned color = num % 74;
   HSLAPixel p(color, 1, 0.5);
   return p;

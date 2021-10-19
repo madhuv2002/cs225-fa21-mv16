@@ -25,13 +25,12 @@ int main() {
   PNG png;
   png.readFromFile("i.png");
   FloodFilledImage image(png);
+  MyColorPicker color;
+  RainbowColorPicker rainbow(0.1);
   BFS bfs(png, Point(10, 20), 0.1);
   DFS dfs(png, Point(20, 310), 0.2);
-  MyColorPicker mycolor;
-  RainbowColorPicker rainbow(0.1);
   
-  
-  image.addFloodFill(dfs, mycolor);
+  image.addFloodFill(dfs, color);
   image.addFloodFill(bfs, rainbow);
   Animation animation = image.animate(1000);
   
