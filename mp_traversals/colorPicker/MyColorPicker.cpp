@@ -3,6 +3,7 @@
 
 #include "ColorPicker.h"
 #include "MyColorPicker.h"
+#include <cmath>
 
 using namespace cs225;
 
@@ -12,5 +13,9 @@ using namespace cs225;
  */
 HSLAPixel MyColorPicker::getColor(unsigned x, unsigned y) {
   /* @todo [Part 3] */
-  return HSLAPixel();
+  
+  int num = (x*4 + y*4);
+  unsigned color = num % 74;
+  HSLAPixel p(color, 1, 0.5);
+  return p;
 }

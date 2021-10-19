@@ -21,11 +21,24 @@ int main() {
   // - The code provided below produces the `myFloodFill.png` file you must
   //   submit Part 3 of this assignment -- uncomment it when you're ready.
   
-  /*
+  
+  PNG png;
+  png.readFromFile("i.png");
+  FloodFilledImage image(png);
+  BFS bfs(png, Point(10, 20), 0.1);
+  DFS dfs(png, Point(20, 310), 0.2);
+  MyColorPicker mycolor;
+  RainbowColorPicker rainbow(0.1);
+  
+  
+  image.addFloodFill(dfs, mycolor);
+  image.addFloodFill(bfs, rainbow);
+  Animation animation = image.animate(1000);
+  
   PNG lastFrame = animation.getFrame( animation.frameCount() - 1 );
   lastFrame.writeToFile("myFloodFill.png");
   animation.write("myFloodFill.gif");
-  */
+  
 
 
   return 0;
