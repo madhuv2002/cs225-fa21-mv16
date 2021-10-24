@@ -326,6 +326,30 @@ class BTree
                   unsigned int order) const;
 };
 
+template <class T, class C>
+size_t binary_search(const std::vector<T>& elements, const C& val, unsigned left, unsigned right)
+{
+  if (right - left == 0) {
+    if (val > elements[right]) {
+      return right + 1;
+    } else {
+      return right;
+    }
+  }
+  
+  int middle = (right + left)/2;
+  
+  if (elements[(right + left) / 2] > val) {
+    return binary_search(elements, val, 0, middle);
+  }
+  
+  if (elements[(right + left) / 2] < val) {
+    return binary_search(elements, val, middle + 1, right);
+  }
+  
+  return middle;
+}
+
 /**
  * Generalized function for finding the insertion index of a given element
  * into a given sorted vector.
@@ -342,9 +366,12 @@ template <class T, class C>
 size_t insertion_idx(const std::vector<T>& elements, const C& val)
 {
     /* TODO Your code goes here! */
-
-    return 5;
+    if (elements.size() == 0) {
+      return 0;
+    }
+    return binary_search(elements, val, 0, elements.size() - 1);
 }
+
 
 #include "btree_given.cpp"
 #include "btree.cpp"

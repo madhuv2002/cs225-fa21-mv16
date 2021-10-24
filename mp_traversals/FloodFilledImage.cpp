@@ -65,7 +65,6 @@ Animation FloodFilledImage::animate(unsigned frameInterval) const {
       if (++count % frameInterval == 0) {
         animation.addFrame(temp);
       }
-     
     }
     animation.addFrame(temp);
   }
