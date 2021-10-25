@@ -16,6 +16,11 @@ bool KDTree<Dim>::smallerDimVal(const Point<Dim>& first,
      * @todo Implement this function!
      */
 
+    if (first[curDim] < second[curDim]) {
+      return true;
+    } else if (first[curDim] == second[curDim]) {
+      return first < second;
+    }
     return false;
 }
 
@@ -28,6 +33,18 @@ bool KDTree<Dim>::shouldReplace(const Point<Dim>& target,
      * @todo Implement this function!
      */
 
+     double current = 0;
+    double potential_dist = 0;
+    for (int i = 0; i < Dim; i++) {
+      current += (target[i] - currentBest[i]) * (target[i] - currentBest[i]);
+      potential_dist += (target[i] - potential[i]) * (target[i] - potential[i]);
+    }
+    
+    if (potential_dist < current) {
+      return true;
+    } else if (potential_dist == current) {
+      return potential < currentBest;
+    }
      return false;
 }
 
