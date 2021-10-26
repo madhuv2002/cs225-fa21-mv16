@@ -93,7 +93,6 @@ typename KDTree<Dim>::KDTreeNode* KDTree<Dim>::buildTree(vector<Point<Dim>>& lis
   unsigned med = (l + r) / 2; 
   Point<Dim> temp = select(list, dim, l, r, med);
   KDTreeNode* subroot = new KDTreeNode(temp); 
-  size++;
   subroot->right = buildTree(list, (dim + 1) % Dim, med + 1, r); 
   subroot->left = buildTree(list, (dim + 1) % Dim, l, med - 1); 
   return subroot;
