@@ -12,16 +12,16 @@ template <int Dim>
 bool KDTree<Dim>::smallerDimVal(const Point<Dim>& first,
                                 const Point<Dim>& second, int curDim) const
 {
-    /**
-     * @todo Implement this function!
-     */
-
-    if (first[curDim] < second[curDim]) {
-      return true;
-    } else if (first[curDim] == second[curDim]) {
-      return first < second;
-    }
-    return false;
+  /**
+   * @todo Implement this function!
+   */
+  
+  if (first[curDim] < second[curDim]) {
+    return true;
+  } else if (first[curDim] == second[curDim]) {
+    return first < second;
+  }
+  return false;
 }
 
 template <int Dim>
@@ -29,31 +29,111 @@ bool KDTree<Dim>::shouldReplace(const Point<Dim>& target,
                                 const Point<Dim>& currentBest,
                                 const Point<Dim>& potential) const
 {
-    /**
-     * @todo Implement this function!
-     */
+  /**
+   * @todo Implement this function!
+   */
+  
+  double current = 0;
+  double potential_dist = 0;
+  for (int i = 0; i < Dim; i++) {
+    current += (target[i] - currentBest[i]) * (target[i] - currentBest[i]);
+    potential_dist += (target[i] - potential[i]) * (target[i] - potential[i]);
+  }
+  
+  if (potential_dist < current) {
+    return true;
+  } else if (potential_dist == current) {
+    return potential < currentBest;
+  }
+  return false;
+}
 
-     double current = 0;
-    double potential_dist = 0;
-    for (int i = 0; i < Dim; i++) {
-      current += (target[i] - currentBest[i]) * (target[i] - currentBest[i]);
-      potential_dist += (target[i] - potential[i]) * (target[i] - potential[i]);
+template <int Dim>
+unsigned KDTree<Dim>::partition(vector<Point<Dim>>& list, int dim, unsigned l, unsigned r, unsigned pivotIndex) {
+  Point<Dim> pivot = list[pivotIndex];
+  Point<Dim> temp = pivot;
+  list[pivotIndex] = list[r];
+  list[r] = temp;
+  unsigned storeIndex = l;
+  for(unsigned i = l; i < r - 1; i++) {
+    if(smallerDimVal(list[i], pivot, dim)) {
+      temp = list[storeIndex];
+      list[storeIndex] = list[i];
+      list[i] = temp;
+      storeIndex++;
     }
-    
-    if (potential_dist < current) {
-      return true;
-    } else if (potential_dist == current) {
-      return potential < currentBest;
-    }
-     return false;
+  }
+  temp = list[storeIndex];
+  list[storeIndex] = list[r];
+  list[r] = temp;
+  return storeIndex;
+}
+
+
+template <int Dim>
+Point<Dim> KDTree<Dim>::select(vector<Point<Dim>>& p, int dim, unsigned l, unsigned r, unsigned n) {
+  if(l == r) {
+    return p[l];
+  }
+  unsigned median = partition(p, dim, l, r, n);
+  if(n == median) {
+    return p[n];
+  } else if (n < median) {
+    return select(p, dim, l, median - 1, n);
+  }
+  return select(p, dim, median + 1, r, n);
+}
+
+template <int Dim>
+typename KDTree<Dim>::KDTreeNode* KDTree<Dim>::buildTree(vector<Point<Dim>>& p, int dim, unsigned l, unsigned r) {
+  if(r < l || l >= p.size() || r >= p.size()) { 
+    return NULL; 
+  } 
+  unsigned med = (l + r) / 2; 
+  Point<Dim> temp = select(p, dim % Dim, l, r, med);
+  KDTreeNode* subroot = new KDTreeNode(temp); 
+  subroot->right = buildTree(p, dim++, med + 1, r); 
+  subroot->left = buildTree(p, dim++, l, med - 1); 
+  return subroot;
 }
 
 template <int Dim>
 KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints)
 {
-    /**
-     * @todo Implement this function!
-     */
+  /**
+   * @todo Implement this function!
+   */
+  if (newPoints.empty()) {
+    size = 0;
+    root = NULL;
+  }
+  size = 0;
+  vector<Point<Dim>> points;
+  points.assign(newPoints.begin(), newPoints.end());
+  root = buildTree(points, 0, 0, points.size() - 1);
+}
+
+template <int Dim>
+void KDTree<Dim>::copy(KDTreeNode* subroot, KDTreeNode* other) {
+  subroot = new KDTreeNode();
+  subroot->point = other->point;
+  copy(subroot->left, other->left);
+  copy(subroot->right, other->right);
+}
+
+template <int Dim>
+void KDTree<Dim>::clear(KDTreeNode* root) {
+  if (root == NULL) {
+    return;
+  }
+  if (root->left != NULL) {
+    clear(root->left);
+  }
+  if (root->right != NULL) {
+    clear(root->right);
+  }
+  delete root;
+  root = NULL;
 }
 
 template <int Dim>
@@ -61,6 +141,8 @@ KDTree<Dim>::KDTree(const KDTree<Dim>& other) {
   /**
    * @todo Implement this function!
    */
+  copy(this->root, other->root);
+  size = other.size();
 }
 
 template <int Dim>
@@ -68,7 +150,9 @@ const KDTree<Dim>& KDTree<Dim>::operator=(const KDTree<Dim>& rhs) {
   /**
    * @todo Implement this function!
    */
-
+  clear(this->root);
+  copy(this->root, rhs->root);
+  size = rhs.size();
   return *this;
 }
 
@@ -77,15 +161,19 @@ KDTree<Dim>::~KDTree() {
   /**
    * @todo Implement this function!
    */
+  clear(root);
 }
 
 template <int Dim>
 Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
 {
-    /**
-     * @todo Implement this function!
-     */
-
-    return Point<Dim>();
+  /**
+   * @todo Implement this function!
+   */
+  
+  return findNearestNeighbor(root, query, 0);
 }
 
+template <int Dim>Point<Dim> KDTree<Dim>::findNearestNeighbor(KDTreeNode * subroot, const Point<Dim>& query, int dimension) const {	
+  
+}

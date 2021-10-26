@@ -259,6 +259,12 @@ class KDTree
     /**
      * @todo Add your helper functions here.
      */
+    KDTreeNode* buildTree(vector<Point<Dim>>& p, int dim, unsigned l, unsigned r);
+    Point<Dim> select(vector<Point<Dim>>& p, int dim, unsigned l, unsigned r, unsigned med);
+    unsigned partition(vector<Point<Dim>>& list, int dim, unsigned left, unsigned right, unsigned pivotIndex);
+    void clear(KDTreeNode* root);
+    void copy(KDTreeNode* subroot, KDTreeNode* other);
+    Point<Dim> findNearestNeighbor(KDTreeNode * subroot, const Point<Dim>& query, int dimension) const;
 };
 
 #include "kdtree.hpp"
