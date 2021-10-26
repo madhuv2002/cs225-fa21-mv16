@@ -126,12 +126,8 @@ void KDTree<Dim>::clear(KDTreeNode* root) {
   if (root == NULL) {
     return;
   }
-  if (root->left != NULL) {
-    clear(root->left);
-  }
-  if (root->right != NULL) {
-    clear(root->right);
-  }
+  clear(root->left);
+  clear(root->right);
   delete root;
   root = NULL;
 }
@@ -174,6 +170,7 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
   return findNearestNeighbor(root, query, 0);
 }
 
-template <int Dim>Point<Dim> KDTree<Dim>::findNearestNeighbor(KDTreeNode * subroot, const Point<Dim>& query, int dimension) const {	
-  
+template <int Dim>
+Point<Dim> KDTree<Dim>::findNearestNeighbor(KDTreeNode * subroot, const Point<Dim>& query, int dimension) const {	
+  return NULL;
 }
