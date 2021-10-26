@@ -51,11 +51,11 @@ bool KDTree<Dim>::shouldReplace(const Point<Dim>& target,
 template <int Dim>
 unsigned KDTree<Dim>::partition(vector<Point<Dim>>& list, int dim, unsigned l, unsigned r, unsigned pivotIndex) {
   Point<Dim> pivot = list[pivotIndex];
-  Point<Dim> temp = pivot;
+  Point<Dim> temp = list[pivotIndex];
   list[pivotIndex] = list[r];
   list[r] = temp;
   unsigned storeIndex = l;
-  for(unsigned i = l; i < r - 1; i++) {
+  for(unsigned i = l; i < r; i++) {
     if(smallerDimVal(list[i], pivot, dim)) {
       temp = list[storeIndex];
       list[storeIndex] = list[i];
@@ -92,6 +92,7 @@ typename KDTree<Dim>::KDTreeNode* KDTree<Dim>::buildTree(vector<Point<Dim>>& p, 
   unsigned med = (l + r) / 2; 
   Point<Dim> temp = select(p, dim % Dim, l, r, med);
   KDTreeNode* subroot = new KDTreeNode(temp); 
+  size++;
   subroot->right = buildTree(p, dim++, med + 1, r); 
   subroot->left = buildTree(p, dim++, l, med - 1); 
   return subroot;
@@ -167,10 +168,52 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
    * @todo Implement this function!
    */
   
-  return findNearestNeighbor(root, query, 0);
+  return findNearestNeighbor(query, 0, root);
 }
 
+
 template <int Dim>
-Point<Dim> KDTree<Dim>::findNearestNeighbor(KDTreeNode * subroot, const Point<Dim>& query, int dimension) const {	
-  return NULL;
-}
+Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query, size_t dim, KDTreeNode* curRoot) const {
+    if (curRoot->left == NULL && curRoot->right == NULL) {
+      return curRoot->point;
+    }
+    
+    Point<Dim> nearest = curRoot->point;
+    bool leftrecursed = false;
+    
+    if (smallerDimVal(query, curRoot->point, dim)) {
+      leftrecursed = true;
+      if (curRoot->left) {
+        nearest = findNearestNeighbor(query, (dim + 1) % Dim, curRoot->left);
+      }
+    }
+    else {
+      if (curRoot->right) {
+        nearest = findNearestNeighbor(query, (dim + 1) % Dim, curRoot->right);
+      }
+    }
+    
+    if (shouldReplace(query, nearest, curRoot->point))
+      nearest = curRoot->point;
+    
+    size_t radius = 0;
+    for (size_t i = 0; i < Dim; ++i) {
+      radius += (query[i] - nearest[i]) * (query[i] - nearest[i]);
+    }
+    size_t splitDist = (curRoot->point[dim] - query[dim]) * (curRoot->point[dim] - query[dim]); // split distance on plane
+    
+    if (radius >= splitDist) {
+      Point<Dim> tempNearest = curRoot->point;
+      if (leftrecursed) {
+        if (curRoot->right) {
+          tempNearest = findNearestNeighbor(query, (dim + 1) % Dim, curRoot->right);
+        }
+      }
+      else if (curRoot->left) {
+        tempNearest = findNearestNeighbor(query, (dim + 1) % Dim, curRoot->left);
+      }
+      if (shouldReplace(query, nearest, tempNearest))
+        nearest = tempNearest;
+    }
+    return nearest;
+  }
