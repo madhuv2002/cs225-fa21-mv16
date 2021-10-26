@@ -75,7 +75,8 @@ Point<Dim> KDTree<Dim>::select(vector<Point<Dim>>& p, int dim, unsigned l, unsig
   if(l == r) {
     return p[l];
   }
-  unsigned median = partition(p, dim, l, r, n);
+  unsigned median = n; 
+  median = partition(p, dim, l, r, n);
   if(n == median) {
     return p[n];
   } else if (n < median) {
@@ -93,8 +94,9 @@ typename KDTree<Dim>::KDTreeNode* KDTree<Dim>::buildTree(vector<Point<Dim>>& p, 
   Point<Dim> temp = select(p, dim % Dim, l, r, med);
   KDTreeNode* subroot = new KDTreeNode(temp); 
   size++;
-  subroot->right = buildTree(p, dim++, med + 1, r); 
-  subroot->left = buildTree(p, dim++, l, med - 1); 
+  dim++;
+  subroot->right = buildTree(p, dim, med + 1, r); 
+  subroot->left = buildTree(p, dim, l, med - 1); 
   return subroot;
 }
 
@@ -193,8 +195,9 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query, size_t dim,
       }
     }
     
-    if (shouldReplace(query, nearest, curRoot->point))
+    if (shouldReplace(query, nearest, curRoot->point)) {
       nearest = curRoot->point;
+    }
     
     size_t radius = 0;
     for (size_t i = 0; i < Dim; ++i) {
