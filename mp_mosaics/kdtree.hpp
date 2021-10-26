@@ -51,7 +51,7 @@ bool KDTree<Dim>::shouldReplace(const Point<Dim>& target,
 template <int Dim>
 unsigned KDTree<Dim>::partition(vector<Point<Dim>>& list, int dim, unsigned l, unsigned r, unsigned pivotIndex) {
   Point<Dim> pivot = list[pivotIndex];
-  Point<Dim> temp = list[pivotIndex];
+  Point<Dim> temp = pivot;
   list[pivotIndex] = list[r];
   list[r] = temp;
   unsigned storeIndex = l;
@@ -81,8 +81,9 @@ Point<Dim> KDTree<Dim>::select(vector<Point<Dim>>& list, int dim, unsigned l, un
     return list[n];
   } else if (n < median) {
     return select(list, dim, l, median - 1, n);
+  } else {
+    return select(list, dim, median + 1, r, n);
   }
-  return select(list, dim, median + 1, r, n);
 }
 
 template <int Dim>
