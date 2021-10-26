@@ -71,32 +71,31 @@ unsigned KDTree<Dim>::partition(vector<Point<Dim>>& list, int dim, unsigned l, u
 
 
 template <int Dim>
-Point<Dim> KDTree<Dim>::select(vector<Point<Dim>>& p, int dim, unsigned l, unsigned r, unsigned n) {
+Point<Dim> KDTree<Dim>::select(vector<Point<Dim>>& list, int dim, unsigned l, unsigned r, unsigned n) {
   if(l == r) {
-    return p[l];
+    return list[l];
   }
   unsigned median = n; 
-  median = partition(p, dim, l, r, n);
+  median = partition(list, dim, l, r, n);
   if(n == median) {
-    return p[n];
+    return list[n];
   } else if (n < median) {
-    return select(p, dim, l, median - 1, n);
+    return select(list, dim, l, median - 1, n);
   }
-  return select(p, dim, median + 1, r, n);
+  return select(list, dim, median + 1, r, n);
 }
 
 template <int Dim>
-typename KDTree<Dim>::KDTreeNode* KDTree<Dim>::buildTree(vector<Point<Dim>>& p, int dim, unsigned l, unsigned r) {
-  if(r < l || l >= p.size() || r >= p.size()) { 
+typename KDTree<Dim>::KDTreeNode* KDTree<Dim>::buildTree(vector<Point<Dim>>& list, int dim, unsigned l, unsigned r) {
+  if(r < l || l >= list.size() || r >= list.size()) { 
     return NULL; 
   } 
   unsigned med = (l + r) / 2; 
-  Point<Dim> temp = select(p, dim % Dim, l, r, med);
+  Point<Dim> temp = select(list, dim % Dim, l, r, med);
   KDTreeNode* subroot = new KDTreeNode(temp); 
   size++;
-  dim++;
-  subroot->right = buildTree(p, dim, med + 1, r); 
-  subroot->left = buildTree(p, dim, l, med - 1); 
+  subroot->right = buildTree(list, dim + 1, med + 1, r); 
+  subroot->left = buildTree(list, dim + 1, l, med - 1); 
   return subroot;
 }
 
