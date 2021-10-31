@@ -198,7 +198,7 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query, size_t dim,
   }
   
   unsigned radius = 0;
-  for (size_t i = 0; i < Dim; ++i) {
+  for (unsigned i = 0; i < Dim; i++) {
     radius += (query[i] - nearest[i]) * (query[i] - nearest[i]);
   }
   unsigned splitDist = (curRoot->point[dim] - query[dim]) * (curRoot->point[dim] - query[dim]); // split distance on plane
