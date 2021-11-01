@@ -105,11 +105,10 @@ void LPHashTable<K, V>::remove(K const& key)
   if (table[index] == NULL) {
     return;
   }
-  if (index != -1) {
     delete table[index];
     table[index] = NULL;
     elems--;
-  }
+  
 }
 
 template <class K, class V>
@@ -202,7 +201,7 @@ void LPHashTable<K, V>::resizeTable()
       while (temp[index] != NULL) {
         index = (index + 1) % newSize;
       } 
-      temp[index] = new std::pair<K, V>(table[i]->first, table[i]->second);
+      temp[index] = table[i];
       should_probe[index] = true;
       
     }
