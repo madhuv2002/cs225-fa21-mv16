@@ -202,8 +202,9 @@ void LPHashTable<K, V>::resizeTable()
       while (temp[index] != NULL) {
         index = (index + 1) % newSize;
       } 
-      temp[index] = table[i];
+      temp[index] = new std::pair<K, V>(table[i]->first, table[i]->second);
       should_probe[index] = true;
+      
     }
   }
   size = newSize;
