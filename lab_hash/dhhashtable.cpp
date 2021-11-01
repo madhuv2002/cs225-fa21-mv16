@@ -122,7 +122,6 @@ int DHHashTable<K, V>::findIndex(const K& key) const
      */
     unsigned index = hashes::hash(key, size);
     unsigned index2 = hashes::secondary_hash(key, size);
-    unsigned idx = index;
     while (should_probe[index]) {
       if (table[index] != NULL) {
         if (table[index]->first == key) {
@@ -130,9 +129,6 @@ int DHHashTable<K, V>::findIndex(const K& key) const
         }
       }
       index = (index + index2) % size;
-      if (index == idx) {
-        break;
-      }
     }
     return -1;
 }
