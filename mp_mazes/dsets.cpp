@@ -17,10 +17,6 @@ int DisjointSets::find(int elem) {
 }
 
 void DisjointSets::setunion(int a, int b) {
-  if (find(a) == find(b)) {
-    return;
-  }
-  
   if (find(a) > find(b)) {
     elems[find(b)] = elems[find(a)] + elems[find(b)];
     elems[find(a)] = find(b);
