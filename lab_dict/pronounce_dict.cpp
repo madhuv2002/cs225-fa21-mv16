@@ -29,8 +29,7 @@ using std::stringstream;
  * @param pronun_dict_filename Filename of the CMU pronunciation
  * dictionary.
  */
-PronounceDict::PronounceDict(const string& pronun_dict_filename)
-{
+PronounceDict::PronounceDict(const string& pronun_dict_filename) {
     ifstream pronun_dict_file(pronun_dict_filename);
     string line;
     if (pronun_dict_file.is_open()) {
@@ -75,5 +74,15 @@ PronounceDict::PronounceDict(const map<string, vector<string>>& pronun_dict)
 bool PronounceDict::homophones(const string& word1, const string& word2) const
 {
     /* Your code goes here! */
-    return true;
+    string temp1 = word1;
+    string temp2 = word2;
+    std::transform(temp1.begin(), temp1.end(), temp1.begin(), ::toupper);
+    std::transform(temp2.begin(), temp2.end(), temp2.begin(), ::toupper);
+    
+    if (dict.count(temp1) != 0 && dict.count(temp2) != 0) {
+      if (dict.at(temp1) == dict.at(temp2)) {
+        return true;
+      }
+    }
+    return false;
 }
