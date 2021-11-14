@@ -59,7 +59,7 @@ vector<string> AnagramDict::get_anagrams(const string& word) const
   /* Your code goes here! */
   string s = word;
   std::sort(s.begin(), s.end());
-  if (dict.find(s) == dict.end()) {
+  if (dict.count(s) == 0) {
     return vector<string>();
   }
   return dict.at(s);

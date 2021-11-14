@@ -24,49 +24,44 @@ using std::feof;
 
 string remove_punct(const string& str)
 {
-    string ret;
-    std::remove_copy_if(str.begin(), str.end(), std::back_inserter(ret),
-                        [](int c) {return std::ispunct(c);});
-    return ret;
+  string ret;
+  std::remove_copy_if(str.begin(), str.end(), std::back_inserter(ret),
+                      [](int c) {return std::ispunct(c);});
+  return ret;
 }
 
 CommonWords::CommonWords(const vector<string>& filenames)
 {
-    // initialize all member variables
-    init_file_word_maps(filenames);
-    init_common();
+  // initialize all member variables
+  init_file_word_maps(filenames);
+  init_common();
 }
 
 void CommonWords::init_file_word_maps(const vector<string>& filenames)
 {
-    // make the length of file_word_maps the same as the length of filenames
-    file_word_maps.resize(filenames.size());
-
-    // go through all files
-    for (size_t i = 0; i < filenames.size(); i++) {
-        // get the corresponding vector of words that represents the current
-        // file
-        vector<string> words = file_to_vector(filenames[i]);
-        /* Your code goes here! */
-        for (vector<string>::iterator it = words.begin(); it != words.end(); it++) {
-          file_word_maps[i][*it] += 1;
-        }
+  // make the length of file_word_maps the same as the length of filenames
+  file_word_maps.resize(filenames.size());
+  
+  // go through all files
+  for (size_t i = 0; i < filenames.size(); i++) {
+    // get the corresponding vector of words that represents the current
+    // file
+    vector<string> words = file_to_vector(filenames[i]);
+    /* Your code goes here! */
+    for (string word: words) {
+      file_word_maps[i][word] += 1;
     }
+  }
 }
 
 void CommonWords::init_common()
 {
-    /* Your code goes here! */
-    for (vector<map<string, unsigned int>>::iterator it = file_word_maps.begin(); it != file_word_maps.end(); it++) {
-      for (map<string, unsigned int>::iterator it2 = (*it).begin(); it2 != (*it).end(); it2++) {
-        map<string, unsigned int>::iterator lookup = common.find(it2->first);
-        if (lookup == common.end()) {
-          common[it2->first] = 1;
-        } else {
-          lookup->second += 1;
-        }
-      }
+  /* Your code goes here! */
+  for (auto i : file_word_maps) {
+    for (auto j : i) {
+      common[j.first] += 1;
     }
+  }
 }
 
 /**
@@ -76,23 +71,23 @@ void CommonWords::init_common()
  */
 vector<string> CommonWords::get_common_words(unsigned int n) const
 {
-    vector<string> out;
-    /* Your code goes here! */
-    for (std::pair<string, unsigned int> key : common) {
-      if (key.second == file_word_maps.size()) {
-        bool valid = true;
-        
-        for (unsigned int i = 0; i < file_word_maps.size(); i++) {
+  vector<string> out;
+  /* Your code goes here! */
+  for (auto key : common) {
+    if (key.second == file_word_maps.size()) {
+      bool valid = true;
+      
+      for (unsigned int i = 0; i < file_word_maps.size(); i++) {
         if (file_word_maps[i].at(key.first) < n) {
-            valid = false;
-          }
-        }
-        if (valid) {
-          out.push_back(key.first);
+          valid = false;
         }
       }
+      if (valid) {
+        out.push_back(key.first);
+      }
     }
-    return out;
+  }
+  return out;
 }
 
 /**
@@ -101,15 +96,15 @@ vector<string> CommonWords::get_common_words(unsigned int n) const
  */
 vector<string> CommonWords::file_to_vector(const string& filename) const
 {
-    ifstream words(filename);
-    vector<string> out;
-
-    if (words.is_open()) {
-        std::istream_iterator<string> word_iter(words);
-        while (!words.eof()) {
-            out.push_back(remove_punct(*word_iter));
-            ++word_iter;
-        }
+  ifstream words(filename);
+  vector<string> out;
+  
+  if (words.is_open()) {
+    std::istream_iterator<string> word_iter(words);
+    while (!words.eof()) {
+      out.push_back(remove_punct(*word_iter));
+      ++word_iter;
     }
-    return out;
+  }
+  return out;
 }
