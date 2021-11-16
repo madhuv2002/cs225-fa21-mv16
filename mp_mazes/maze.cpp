@@ -101,7 +101,7 @@ std::vector<int> SquareMaze::solveMaze(){
     traversal.pop();
     
     // check whether we can move in any direction and if it has been visited
-    if(canTravel(x, y, 0) && visited[curr + 1] == -1){
+    if(canTravel(x, y, 0) && visited[curr + 1] == -1) {
       traversal.push(curr + 1);
       visited[curr + 1] = curr;
       // increment the distance for each step
@@ -113,7 +113,7 @@ std::vector<int> SquareMaze::solveMaze(){
       distance[curr + width_] = distance[curr] + 1;
     }
     
-    if(canTravel(x, y, 2) && visited[curr - 1] == -1){
+    if(canTravel(x, y, 2) && visited[curr - 1] == -1) {
       traversal.push(curr - 1);
       visited[curr - 1] = curr;
       distance[curr - 1] = distance[curr] + 1;
@@ -126,7 +126,7 @@ std::vector<int> SquareMaze::solveMaze(){
     }
   }
   // get the bottom right cell as the one with the longest path
-  int longest = width_ * (height_ - 1);
+  int longest = 0;
   // move along the bottom row and find the largest val
   for (int x = 0; x < width_; x++) {
     int temp = distance[longest];
@@ -206,7 +206,7 @@ PNG* SquareMaze::drawMazeWithSolution(){
     // right
     if(solution[i] == 0){
       for(int i = 0; i < 10; i++){
-        HSLAPixel & cur_pixel = result->getPixel(x,y);
+        HSLAPixel & cur_pixel = result->getPixel(x, y);
         cur_pixel.h = 0;
         cur_pixel.s = 1;
         cur_pixel.l = 0.5;
@@ -215,8 +215,8 @@ PNG* SquareMaze::drawMazeWithSolution(){
     }
     if(solution[i] == 1) {
       // down
-      for(int i = 0; i<10; i++){
-        HSLAPixel & cur_pixel = result->getPixel(x,y);
+      for(int i = 0; i < 10; i++){
+        HSLAPixel & cur_pixel = result->getPixel(x, y);
         cur_pixel.h = 0;
         cur_pixel.s = 1;
         cur_pixel.l = 0.5;
@@ -226,7 +226,7 @@ PNG* SquareMaze::drawMazeWithSolution(){
     // left
     if(solution[i] == 2){
       for(int i = 0; i < 10; i++){
-        HSLAPixel & cur_pixel = result->getPixel(x,y);
+        HSLAPixel & cur_pixel = result->getPixel(x, y);
         cur_pixel.h = 0;
         cur_pixel.s = 1;
         cur_pixel.l = 0.5;
@@ -235,8 +235,8 @@ PNG* SquareMaze::drawMazeWithSolution(){
     }
     // up
     if(solution[i] == 3){
-      for(int i =0; i<10; i++){
-        HSLAPixel & cur_pixel = result->getPixel(x,y);
+      for(int i = 0; i < 10; i++){
+        HSLAPixel & cur_pixel = result->getPixel(x, y);
         cur_pixel.h = 0;
         cur_pixel.s = 1;
         cur_pixel.l = 0.5;
@@ -244,6 +244,7 @@ PNG* SquareMaze::drawMazeWithSolution(){
       }
     }
   }
+  
   HSLAPixel & curr = result->getPixel(x,y);
   curr.h = 0;
   curr.s = 1;
@@ -252,7 +253,7 @@ PNG* SquareMaze::drawMazeWithSolution(){
   y += 5;
   
   for(int i = 0; i < 9; i++) {
-    HSLAPixel & cur_pixel = result->getPixel(x,y);
+    HSLAPixel & cur_pixel = result->getPixel(x, y);
     cur_pixel.l = 1;
     x++;
   }
