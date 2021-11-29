@@ -85,13 +85,15 @@ std::vector<int> SquareMaze::solveMaze(){
   queue<int> traversal;
   traversal.push(0);
   vector<int> answer;
-  vector<int> visited; 
+  vector<bool> visited; 
   // vector to store the distance at each point
-  vector<int> distance;  
+  vector<int> distance;
+  vector<int> pos;
   visited.push_back(0); 
   for(int i = 0; i < width_ * height_; i++){
-    visited.push_back(-1); 
+    visited.push_back(false); 
     distance.push_back(0);
+    pos.push_back(-1);
   }
   visited[0] = 0;
   while(!traversal.empty()){
@@ -101,27 +103,31 @@ std::vector<int> SquareMaze::solveMaze(){
     traversal.pop();
     
     // check whether we can move in any direction and if it has been visited
-    if(canTravel(x, y, 0) && visited[curr + 1] == -1) {
+    if(canTravel(x, y, 0) && visited[curr + 1] == false) {
       traversal.push(curr + 1);
-      visited[curr + 1] = curr;
+      visited[curr + 1] = true;
+      pos[curr + 1] = curr;
       // increment the distance for each step
       distance[curr + 1] = distance[curr] + 1;
     }
-    if(canTravel(x, y, 1) && visited[curr + width_] == -1) {
+    if(canTravel(x, y, 1) && visited[curr + width_] == false) {
       traversal.push(curr + width_);
-      visited[curr + width_] = curr;
+      visited[curr + width_] = true;
+      pos[curr + width_] = curr;
       distance[curr + width_] = distance[curr] + 1;
     }
     
-    if(canTravel(x, y, 2) && visited[curr - 1] == -1) {
+    if(canTravel(x, y, 2) && visited[curr - 1] == false) {
       traversal.push(curr - 1);
-      visited[curr - 1] = curr;
+      visited[curr - 1] = true;
+      pos[curr - 1] = curr;
       distance[curr - 1] = distance[curr] + 1;
     }
     
-    if(canTravel(x, y, 3) && visited[curr - width_] == -1){
+    if(canTravel(x, y, 3) && visited[curr - width_] == false){
       traversal.push(curr - width_);
-      visited[curr - width_] = curr;
+      visited[curr - width_] = true;
+      pos[curr - width_] = curr;
       distance[curr - width_] = distance[curr] + 1;
     }
   }
@@ -137,19 +143,19 @@ std::vector<int> SquareMaze::solveMaze(){
   curr = longest; 
   stack<int> temp;
   while (curr != 0) {
-    if(visited[curr] == curr - 1){
+    if(pos[curr] == curr - 1){
       temp.push(0);
     }
-    if(visited[curr] == curr - width_){
+    if(pos[curr] == curr - width_){
       temp.push(1);
     }
-    if(visited[curr] == curr + 1){
+    if(pos[curr] == curr + 1){
       temp.push(2);
     }
-    if(visited[curr] == curr + width_) {
+    if(pos[curr] == curr + width_) {
       temp.push(3);
     }
-    curr = visited[curr];
+    curr = pos[curr];
   }
   int size = temp.size();
   for (int i = 0; i < size; i++) {
@@ -202,60 +208,40 @@ PNG* SquareMaze::drawMazeWithSolution(){
   int x = 5;
   int y = 5;
   
-  for(unsigned i=0; i<solution.size(); i++) {
+  for(unsigned i=0; i < solution.size(); i++) {
     // right
     if(solution[i] == 0){
-      for(int i = 0; i < 10; i++){
-        HSLAPixel & cur_pixel = result->getPixel(x, y);
-        cur_pixel.h = 0;
-        cur_pixel.s = 1;
-        cur_pixel.l = 0.5;
-        x++;
+      for(int i = 0; i <= 10; i++) {
+        result->getPixel(x + i, y) = HSLAPixel(0, 1, 0.5, 1);
       }
+      x += 10;
     }
     if(solution[i] == 1) {
       // down
-      for(int i = 0; i < 10; i++){
-        HSLAPixel & cur_pixel = result->getPixel(x, y);
-        cur_pixel.h = 0;
-        cur_pixel.s = 1;
-        cur_pixel.l = 0.5;
-        y++;
+      for(int i = 0; i <= 10; i++) {
+        result->getPixel(x, y + i) = HSLAPixel(0, 1, 0.5, 1);
       }
+      y += 10;
     }
     // left
     if(solution[i] == 2){
-      for(int i = 0; i < 10; i++){
-        HSLAPixel & cur_pixel = result->getPixel(x, y);
-        cur_pixel.h = 0;
-        cur_pixel.s = 1;
-        cur_pixel.l = 0.5;
-        x--;
+      for(int i = 0; i <= 10; i++) {
+        result->getPixel(x - i, y) = HSLAPixel(0, 1, 0.5, 1);
       }
+      x -= 10;
     }
     // up
     if(solution[i] == 3){
-      for(int i = 0; i < 10; i++){
-        HSLAPixel & cur_pixel = result->getPixel(x, y);
-        cur_pixel.h = 0;
-        cur_pixel.s = 1;
-        cur_pixel.l = 0.5;
-        y--;
+      for(int i = 0; i <= 10; i++) {
+        result->getPixel(x, y - i) = HSLAPixel(0, 1, 0.5, 1);
       }
+      y -= 10;
     }
   }
   
-  HSLAPixel & curr = result->getPixel(x,y);
-  curr.h = 0;
-  curr.s = 1;
-  curr.l = 0.5;
-  x -= 4;
-  y += 5;
-  
-  for(int i = 0; i < 9; i++) {
-    HSLAPixel & cur_pixel = result->getPixel(x, y);
-    cur_pixel.l = 1;
-    x++;
+  for(int i = 1; i <= 9; i++) {
+    HSLAPixel& p = result->getPixel((x / 10) * 10 + i, height_ * 10);  
+    p.l = 1;
   }
   return result;
 }
