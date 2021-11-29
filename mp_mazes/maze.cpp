@@ -168,22 +168,19 @@ std::vector<int> SquareMaze::solveMaze(){
 
 PNG* SquareMaze::drawMaze() const{
   PNG* result = new PNG(width_ * 10 + 1, height_ * 10 + 1);
+  
+  
+  for(int k = 10; k < width_ * 10 + 1; k++){
+    HSLAPixel & cur_pixel = result->getPixel(k, 0);
+    cur_pixel.l = 0;
+  }
+  for(int k = 0; k < height_ * 10 + 1; k++) {
+    HSLAPixel & cur_pixel = result->getPixel(0, k );
+    cur_pixel.l = 0;
+  }
+  
   for(int x = 0; x < width_; x++) {
     for(int y = 0; y < height_; y++) {
-      if(y == 0) {
-        for(unsigned k = 0; k < 10; k++){
-          if((x * 10 + k < 1) || (x * 10 + k > 9)) {
-            HSLAPixel & cur_pixel = result->getPixel(x * 10 + k, 0);
-            cur_pixel.l = 0;
-          }
-        }
-      }
-      if(x == 0) {
-        for(unsigned k = 0; k < 10;k++) {
-          HSLAPixel & cur_pixel = result->getPixel(0, y * 10 + k);
-          cur_pixel.l = 0;
-        }
-      }
       if(maze_walls[y * width_ + x].first) {
         for(unsigned k = 0; k <= 10;k++) {
           HSLAPixel & cur_pixel = result->getPixel((x + 1) * 10, y * 10 + k);
