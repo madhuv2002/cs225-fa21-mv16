@@ -95,7 +95,7 @@ std::vector<int> SquareMaze::solveMaze(){
     distance.push_back(0);
     pos.push_back(-1);
   }
-  visited[0] = 0;
+  visited[0] = 1;
   while(!traversal.empty()){
     curr = traversal.front();
     int x = curr % width_;
