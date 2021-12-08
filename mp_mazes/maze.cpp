@@ -25,8 +25,8 @@ void 	SquareMaze::makeMaze (int width, int height){
     maze_walls.push_back(std::pair<bool, bool>(true, true)); 
   }
   
-  
-  while(dsets.size(0) < width_ * height_) {
+  int i = 0;
+  while(i < width_ * height_ - 1) {
     int x = rand() % width_;
     int y = rand() % height_;
     
@@ -34,11 +34,13 @@ void 	SquareMaze::makeMaze (int width, int height){
       if(x  < width_ - 1 && dsets.find(x + y * width_) != dsets.find((1 + x) + y * width_)) {
         maze_walls[y * width_ + x].first = false;
         dsets.setunion(x + y * width_, 1 + x + y * width_);
+        i++;
       }
     } else {
       if(y < height_ - 1 && dsets.find(x + y * width_) != dsets.find(x + (y + 1) * width_)) {
         maze_walls[y * width_ + x].second = false;
         dsets.setunion(x + y * width_, x + (y + 1) * width_);
+        i++;
       }
     }
   }
