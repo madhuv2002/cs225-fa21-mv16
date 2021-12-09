@@ -67,7 +67,7 @@ bool SquareMaze::canTravel (int x, int y, int dir) const {
     if (y == 0) {
       return false;
     }
-    return (maze_walls[y * width_ + x - width_].second == false);
+    return (maze_walls[y * width_ + x - width_].second == true);
   }
   
   return false;
@@ -137,7 +137,7 @@ std::vector<int> SquareMaze::solveMaze(){
   // find the largest distance 
   for (int x = 0; x < width_; x++) {
     int temp = distance[longest];
-    if(distance[width_ * (height_ - 1) + x] > temp){
+    if(temp < distance[width_ * (height_ - 1) + x]){
       longest = width_ * (height_ - 1) + x;
     }
   }
