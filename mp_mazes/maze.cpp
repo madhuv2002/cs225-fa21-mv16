@@ -197,28 +197,40 @@ PNG* SquareMaze::drawMazeWithSolution(){
     // right
     if(solution[i] == 0){
       for(int i = 0; i <= 10; i++) {
-        result->getPixel(x + i, y) = HSLAPixel(0, 1, 0.5, 1);
+        HSLAPixel& cur = result->getPixel(x + i, y);
+        cur.h = 0;
+        cur.s = 1;
+        cur.l = 0.5;
       }
       x += 10;
     }
     if(solution[i] == 1) {
       // down
       for(int i = 0; i <= 10; i++) {
-        result->getPixel(x, y + i) = HSLAPixel(0, 1, 0.5, 1);
+        HSLAPixel& cur = result->getPixel(x, y + i);
+        cur.h = 0;
+        cur.s = 1;
+        cur.l = 0.5;
       }
       y += 10;
     }
     // left
     if(solution[i] == 2){
       for(int i = 0; i <= 10; i++) {
-        result->getPixel(x - i, y) = HSLAPixel(0, 1, 0.5, 1);
+        HSLAPixel& cur = result->getPixel(x - i, y);
+        cur.h = 0;
+        cur.s = 1;
+        cur.l = 0.5;
       }
       x -= 10;
     }
     // up
     if(solution[i] == 3){
       for(int i = 0; i <= 10; i++) {
-        result->getPixel(x, y - i) = HSLAPixel(0, 1, 0.5, 1);
+        HSLAPixel& cur = result->getPixel(x, y - i);
+        cur.h = 0;
+        cur.s = 1;
+        cur.l = 0.5;
       }
       y -= 10;
     }
