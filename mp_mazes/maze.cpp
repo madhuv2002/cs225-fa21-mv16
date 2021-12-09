@@ -67,7 +67,7 @@ bool SquareMaze::canTravel (int x, int y, int dir) const {
     if (y == 0) {
       return false;
     }
-    return !(maze_walls[x + (y-1) * width_].second == true);
+    return !(maze_walls[y * width_ + x - width_].second == true);
   }
   
   return false;
@@ -134,31 +134,26 @@ std::vector<int> SquareMaze::solveMaze(){
     }
   }
   int longest = 0;
-  // move along the bottom row and find the largest distance 
+  // find the largest distance 
   for (int x = 0; x < width_; x++) {
     int temp = distance[longest];
     if(distance[width_ * (height_ - 1) + x] > temp){
       longest = width_ * (height_ - 1) + x;
     }
   }
-  stack<int> temp;
   while (longest != 0) {
     int loc = pos[longest];
-    if(longest - 1 == loc)
-      temp.push(0);
-    if(longest - width_ == loc)
-      temp.push(1);
-    if(longest + 1 == loc) 
-      temp.push(2);
-    if(longest + width_ == loc) 
-      temp.push(3);
+    if(longest == loc + 1)
+      answer.push_back(0);
+    if(longest == loc + width_)
+      answer.push_back(1);
+    if(longest == loc - 1) 
+      answer.push_back(2);
+    if(longest == loc - width_) 
+      answer.push_back(3);
     longest = loc;
   }
-  int size = temp.size();
-  for (int i = 0; i < size; i++) {
-    answer.push_back(temp.top());
-    temp.pop();
-  }
+  reverse(answer.begin(), answer.end());
   return answer;
   
 }
@@ -178,14 +173,12 @@ PNG* SquareMaze::drawMaze() const{
     for(int y = 0; y < height_; y++) {
       if(maze_walls[y * width_ + x].first) {
         for(unsigned k = 0; k <= 10; k++) {
-          HSLAPixel & cur_pixel = result->getPixel((x + 1) * 10, y * 10 + k);
-          cur_pixel.l = 0;
+          result->getPixel((x + 1) * 10, y * 10 + k).l = 0;
         }
       }
       if(maze_walls[y * width_ + x].second) {
         for(unsigned k = 0; k <= 10; k++) {
-          HSLAPixel & cur_pixel = result->getPixel(x * 10 + k, (y + 1) * 10);
-          cur_pixel.l = 0;
+          result->getPixel(x * 10 + k, (y + 1) * 10).l = 0;
         }
       }
     }

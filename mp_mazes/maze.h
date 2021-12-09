@@ -19,7 +19,7 @@ public:
   vector<int> solveMaze();
   PNG* drawMaze() const;
   PNG* drawMazeWithSolution();
-  
+private:
   vector<pair<bool, bool>> maze_walls;
   DisjointSets dsets;
   int width_;
