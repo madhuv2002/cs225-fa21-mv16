@@ -49,25 +49,25 @@ void 	SquareMaze::makeMaze (int width, int height){
 bool SquareMaze::canTravel (int x, int y, int dir) const {
   // can move right
   if (dir == 0) {
-    return (maze_walls[y * width_ + x].first == false);
+    return !(maze_walls[y * width_ + x].first == true);
   }
   // can move down
   if (dir == 1) {
-    return (maze_walls[x + y * width_].second == false);
+    return !(maze_walls[x + y * width_].second == true);
   }
   // can move left
   if (dir == 2) {
     if (x == 0) {
       return false;
     }
-    return (maze_walls[x + y * width_ - 1].first == false);
+    return !(maze_walls[x + y * width_ - 1].first == true);
   }
   // can move up
   if (dir == 3) {
     if (y == 0) {
       return false;
     }
-    return (maze_walls[y * width_ + x - width_].second == true);
+    return !(maze_walls[y * width_ + x - width_].second == true);
   }
   
   return false;
